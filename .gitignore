@@ -1,0 +1,14 @@
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+node_modules
+
+# build / generate output
+dist
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.production.local
+.env.local
+
+# TypeScript cache
+*.tsbuildinfo

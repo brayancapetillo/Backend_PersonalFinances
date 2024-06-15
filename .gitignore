@@ -1,8 +1,11 @@
+# config VSCODE
+.vscode/
+
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-node_modules
+node_modules/
 
 # build / generate output
-dist
+dist/
 
 # dotenv environment variable files
 .env

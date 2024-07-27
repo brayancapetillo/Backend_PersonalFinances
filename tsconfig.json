@@ -3,10 +3,10 @@
     "target": "es2016",
     "module": "commonjs",
     "moduleResolution": "Node",
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
 
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
       "@config/*": ["./src/config/*"]
     },

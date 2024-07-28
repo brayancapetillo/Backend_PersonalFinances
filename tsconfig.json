@@ -8,7 +8,9 @@
 
     "baseUrl": ".",
     "paths": {
-      "@config/*": ["./src/config/*"]
+      "@config/*": ["src/config/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@type/*": ["src/types/*"]
     },
 
     "sourceMap": true,

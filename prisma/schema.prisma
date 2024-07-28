@@ -14,53 +14,68 @@ datasource db {
 }
 
 model userPF {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique @db.NVarChar(255)
-  name      String    @db.NVarChar(255)
-  lastName  String?   @db.NVarChar(255)
-  birthday  DateTime?
-  phone     String?   @unique @db.NVarChar(12)
-  idSex     Int
-  password  String
-  verify    Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  sex       sex       @relation(fields: [idSex], references: [id])
-  account   account[]
-  budget    budget[]
-  goal      goal[]
+  id         Int       @id @default(autoincrement())
+  email      String    @unique @db.NVarChar(255)
+  name       String    @db.NVarChar(255)
+  lastName   String?   @db.NVarChar(255)
+  birthday   DateTime?
+  phone      String?   @unique @db.NVarChar(12)
+  idSex      Int
+  idLenguage Int
+  password   String
+  verify     Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  sex        sex       @relation(fields: [idSex], references: [id])
+  lenguage   lenguage  @relation(fields: [idLenguage], references: [id])
+  account    account[]
+  budget     budget[]
+  goal       goal[]
 }
 
 model sex {
-  id   Int      @id @default(autoincrement())
-  name String   @db.NVarChar(50)
-  user userPF[]
+  id             Int              @id @default(autoincrement())
+  name           String           @db.NVarChar(50)
+  user           userPF[]
+  sexTranslation sexTranslation[]
+}
+
+model lenguage {
+  id                      Int                       @id @default(autoincrement())
+  code                    String                    @db.NVarChar(5)
+  name                    String                    @db.NVarChar(50)
+  userPF                  userPF[]
+  sexTranslation          sexTranslation[]
+  accountTypeTranslation  accountTypeTranslation[]
+  categoryTranslation     categoryTranslation[]
+  categoryTypeTranslation categoryTypeTranslation[]
 }
 
 model account {
   id            Int             @id @default(autoincrement())
   idUser        Int
   name          String          @db.NVarChar(50)
-  idBankType    Int
+  idBank        Int
   idAccountType Int
   balance       Decimal         @db.Decimal(10, 4)
   createdAt     DateTime        @default(now())
   user          userPF          @relation(fields: [idUser], references: [id])
-  bankType      bankType        @relation(fields: [idBankType], references: [id])
+  bank          bank            @relation(fields: [idBank], references: [id])
   accountType   accountType     @relation(fields: [idAccountType], references: [id])
   transactionPF transactionPF[]
 }
 
-model bankType {
+model bank {
   id      Int       @id @default(autoincrement())
   name    String    @db.NVarChar(50)
   account account[]
 }
 
 model accountType {
-  id      Int       @id @default(autoincrement())
-  name    String    @db.NVarChar(50)
-  account account[]
+  id                     Int                      @id @default(autoincrement())
+  name                   String                   @db.NVarChar(50)
+  account                account[]
+  accountTypeTranslation accountTypeTranslation[]
 }
 
 model transactionPF {
@@ -76,18 +91,20 @@ model transactionPF {
 }
 
 model category {
-  id             Int             @id @default(autoincrement())
-  name           String          @db.NVarChar(100)
-  idCategoryType Int
-  categoryType   categoryType    @relation(fields: [idCategoryType], references: [id])
-  transactionPF  transactionPF[]
-  budget         budget[]
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.NVarChar(100)
+  idCategoryType      Int
+  categoryType        categoryType          @relation(fields: [idCategoryType], references: [id])
+  transactionPF       transactionPF[]
+  budget              budget[]
+  categoryTranslation categoryTranslation[]
 }
 
 model categoryType {
-  id       Int        @id @default(autoincrement())
-  name     String     @db.NVarChar(100)
-  category category[]
+  id                      Int                       @id @default(autoincrement())
+  name                    String                    @db.NVarChar(100)
+  category                category[]
+  categoryTypeTranslation categoryTypeTranslation[]
 }
 
 model budget {
@@ -111,4 +128,48 @@ model goal {
   targetDate    DateTime @db.DateTime
   createdAt     DateTime @default(now())
   user          userPF   @relation(fields: [idUser], references: [id])
+}
+
+model sexTranslation {
+  id         Int      @id @default(autoincrement())
+  idSex      Int
+  idLenguage Int
+  name       String   @db.NVarChar(50)
+  sex        sex      @relation(fields: [idSex], references: [id])
+  lenguage   lenguage @relation(fields: [idLenguage], references: [id])
+
+  @@unique([idSex, idLenguage, name])
+}
+
+model accountTypeTranslation {
+  id            Int         @id @default(autoincrement())
+  idAccountType Int
+  idLenguage    Int
+  name          String      @db.NVarChar(50)
+  accountType   accountType @relation(fields: [idAccountType], references: [id])
+  lenguage      lenguage    @relation(fields: [idLenguage], references: [id])
+
+  @@unique([idAccountType, idLenguage, name])
+}
+
+model categoryTranslation {
+  id         Int      @id @default(autoincrement())
+  idCategory Int
+  idLenguage Int
+  name       String   @db.NVarChar(50)
+  category   category @relation(fields: [idCategory], references: [id])
+  lenguage   lenguage @relation(fields: [idLenguage], references: [id])
+
+  @@unique([idCategory, idLenguage, name])
+}
+
+model categoryTypeTranslation {
+  id             Int          @id @default(autoincrement())
+  idCategoryType Int
+  idLenguage     Int
+  name           String       @db.NVarChar(50)
+  categoryType   categoryType @relation(fields: [idCategoryType], references: [id])
+  lenguage       lenguage     @relation(fields: [idLenguage], references: [id])
+
+  @@unique([idCategoryType, idLenguage, name])
 }

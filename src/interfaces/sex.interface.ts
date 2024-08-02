@@ -5,4 +5,4 @@ export interface sex extends Omit<sexPrisma, 'name'> {
   name: typeSex
 }
 
-export interface sexCreate extends Pick<sex, 'name'> {}
+export type sexCreate = Pick<sex, 'name'>

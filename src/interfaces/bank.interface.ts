@@ -5,4 +5,4 @@ export interface bank extends Omit<bankPrisma, 'name'> {
   name: typeBank
 }
 
-export interface bankCreate extends Pick<bank, 'name'> {}
+export type bankCreate = Pick<bank, 'name'>

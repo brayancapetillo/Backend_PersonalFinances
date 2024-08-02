@@ -7,6 +7,8 @@ import { bankCreate } from '@interfaces/bank.interface'
 import { dataBank } from './data/bank'
 import { accountTypeCreate } from '@interfaces/accountType.interface'
 import { dataAccountType } from './data/accountType'
+import { categoryTypeCreate } from '@interfaces/categoryType.interface'
+import { dataCategoryType } from './data/categoryType'
 
 const prisma = new PrismaClient()
 
@@ -34,11 +36,20 @@ const insertDataAccountType = async (accountType: accountTypeCreate): Promise<vo
   }
 }
 
+const insertDataCategoryType = async (categoryType: categoryTypeCreate): Promise<void> => {
+  try {
+    await prisma.categoryType.create({ data: categoryType })
+  } catch (error) {
+    console.error(chalk.red(`Failed to insert ${JSON.stringify(categoryType)}: ${error as string}`))
+  }
+}
+
 const main = async (): Promise<void> => {
   try {
     for (const sex of dataSex) { await insertDataSex(sex) }
     for (const bank of dataBank) { await insertDataBank(bank) }
     for (const accountType of dataAccountType) { await insertDataAccountType(accountType) }
+    for (const categoryType of dataCategoryType) { await insertDataCategoryType(categoryType) }
 
     console.log(chalk.green('Data successfully inserted'))
   } catch (error) {

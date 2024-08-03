@@ -11,8 +11,18 @@ import { categoryTypeCreate } from '@interfaces/categoryType.interface'
 import { dataCategoryType } from './data/categoryType'
 import { categoryCreate } from '@interfaces/category.interface'
 import { dataCategory } from './data/category'
+import { lenguageCreate } from '@interfaces/lenguage.interface'
+import { dataLenguage } from './data/lenguage'
 
 const prisma = new PrismaClient()
+
+const insertDataLenguage = async (lenguage: lenguageCreate): Promise<void> => {
+  try {
+    await prisma.lenguage.create({ data: lenguage })
+  } catch (error) {
+    console.error(chalk.red(`Failed to insert ${JSON.stringify(lenguage)}: ${error as string}`))
+  }
+}
 
 const insertDataSex = async (sex: sexCreate): Promise<void> => {
   try {
@@ -56,6 +66,7 @@ const insertDataCategory = async (category: categoryCreate): Promise<void> => {
 
 const main = async (): Promise<void> => {
   try {
+    for (const lenguage of dataLenguage) { await insertDataLenguage(lenguage) }
     for (const sex of dataSex) { await insertDataSex(sex) }
     for (const bank of dataBank) { await insertDataBank(bank) }
     for (const accountType of dataAccountType) { await insertDataAccountType(accountType) }

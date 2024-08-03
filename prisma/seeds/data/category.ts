@@ -39,7 +39,7 @@ export const dataCategory: categoryCreate[] = [
   { name: 'Tuition and Fees', idCategoryType: 8 },
   { name: 'School Supplies', idCategoryType: 8 },
   { name: 'Courses and Workshops', idCategoryType: 8 },
-  { name: 'FoodPets', idCategoryType: 9 },
+  { name: 'Food', idCategoryType: 9 },
   { name: 'Veterinary Care', idCategoryType: 9 },
   { name: 'Toys and Accessories', idCategoryType: 9 },
   { name: 'Donations to NGOs', idCategoryType: 10 },

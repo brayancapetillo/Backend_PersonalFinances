@@ -1,4 +1,4 @@
-import { sexTranslationCreate } from '@interfaces/sexTranslation.interface'
+import { sexTranslationCreate } from '@interfaces/translation/sexTranslation.interface'
 
 export const dataSexTranslation: sexTranslationCreate[] = [
   // Español

@@ -13,8 +13,10 @@ import { categoryCreate } from '@interfaces/category.interface'
 import { dataCategory } from './data/category'
 import { lenguageCreate } from '@interfaces/lenguage.interface'
 import { dataLenguage } from './data/lenguage'
-import { sexTranslationCreate } from '@interfaces/sexTranslation.interface'
+import { sexTranslationCreate } from '@interfaces/translation/sexTranslation.interface'
 import { dataSexTranslation } from './data/translation/sexTranslation'
+import { accountTTranslationCreate } from '@interfaces/translation/accountTypeTranslation.interface'
+import { dataAccountTTranslation } from './data/translation/accountTypeTranslation'
 
 const prisma = new PrismaClient()
 
@@ -74,6 +76,14 @@ const insertDataSexTranslation = async (sexTranslation: sexTranslationCreate): P
   }
 }
 
+const insertDataAccountTTranslation = async (accountTTranslation: accountTTranslationCreate): Promise<void> => {
+  try {
+    await prisma.accountTypeTranslation.create({ data: accountTTranslation })
+  } catch (error) {
+    console.error(chalk.red(`Failed to insert ${JSON.stringify(accountTTranslation)}: ${error as string}`))
+  }
+}
+
 const main = async (): Promise<void> => {
   try {
     for (const lenguage of dataLenguage) { await insertDataLenguage(lenguage) }
@@ -85,6 +95,7 @@ const main = async (): Promise<void> => {
 
     // translation
     for (const sexTranslation of dataSexTranslation) { await insertDataSexTranslation(sexTranslation) }
+    for (const accountTTranslation of dataAccountTTranslation) { await insertDataAccountTTranslation(accountTTranslation) }
 
     console.log(chalk.green('Data successfully inserted'))
   } catch (error) {

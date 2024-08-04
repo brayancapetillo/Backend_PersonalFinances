@@ -13,3 +13,4 @@ dist/
 
 # Ignore configuration files
 .env
+commitlint.config.*

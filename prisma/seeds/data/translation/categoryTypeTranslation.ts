@@ -1,6 +1,6 @@
 import { categoryTypeTranslationCreate } from '@interfaces/translation/categoryTypeTranslation.interface'
 
-export const categoryTypeTranslations: categoryTypeTranslationCreate[] = [
+export const datacategoryTypeTranslation: categoryTypeTranslationCreate[] = [
   // Español
   { idCategoryType: 1, idLenguage: 1, name: 'Ingreso' },
   { idCategoryType: 2, idLenguage: 1, name: 'Gastos Fijos' },

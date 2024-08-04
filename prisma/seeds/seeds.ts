@@ -18,7 +18,9 @@ import { dataSexTranslation } from './data/translation/sexTranslation'
 import { accountTTranslationCreate } from '@interfaces/translation/accountTypeTranslation.interface'
 import { dataAccountTTranslation } from './data/translation/accountTypeTranslation'
 import { categoryTypeTranslationCreate } from '@interfaces/translation/categoryTypeTranslation.interface'
-import { datacategoryTypeTranslations } from './data/translation/categoryTypeTranslation'
+import { datacategoryTypeTranslation } from './data/translation/categoryTypeTranslation'
+import { dataCategoryTranslation } from './data/translation/categoryTranslation'
+import { categoryTranslationCreate } from '@interfaces/translation/categoryTranslation.interface'
 
 const prisma = new PrismaClient()
 
@@ -94,6 +96,15 @@ const insertDataCategoryTypeTranslation = async (categoryTypeTranslation: catego
   }
 }
 
+const insertDataCategoryTranslation = async (categoryTranslation: categoryTranslationCreate): Promise<void> => {
+  try {
+    await prisma.categoryTranslation.create({ data: categoryTranslation })
+  } catch (error) {
+    console.log(error)
+    console.error(chalk.red(`Failed to insert ${JSON.stringify(categoryTranslation)}: ${error as string}`))
+  }
+}
+
 const main = async (): Promise<void> => {
   try {
     for (const lenguage of dataLenguage) { await insertDataLenguage(lenguage) }
@@ -106,7 +117,8 @@ const main = async (): Promise<void> => {
     // translation
     for (const sexTranslation of dataSexTranslation) { await insertDataSexTranslation(sexTranslation) }
     for (const accountTTranslation of dataAccountTTranslation) { await insertDataAccountTTranslation(accountTTranslation) }
-    for (const categoryTypeTranslation of datacategoryTypeTranslations) { await insertDataCategoryTypeTranslation(categoryTypeTranslation) }
+    for (const categoryTypeTranslation of datacategoryTypeTranslation) { await insertDataCategoryTypeTranslation(categoryTypeTranslation) }
+    for (const categoryTranslation of dataCategoryTranslation) { await insertDataCategoryTranslation(categoryTranslation) }
 
     console.log(chalk.green('Data successfully inserted'))
   } catch (error) {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/dot-notation */
 import { lenguageCreate } from '@interfaces/lenguage.interface'
 
 export const dataLenguage: lenguageCreate[] = [

@@ -5,6 +5,7 @@ import { dataLenguage } from '../../prisma/seeds/data/lenguage'
 import { dataBank } from '../../prisma/seeds/data/bank'
 import { dataAccountType } from '../../prisma/seeds/data/accountType'
 import { dataCategoryType } from '../../prisma/seeds/data/categoryType'
+import { dataCategory } from '../../prisma/seeds/data/category'
 
 const prisma = new PrismaClient()
 
@@ -38,6 +39,14 @@ describe('seed tests', () => {
       for (const categoryType of dataCategoryType) {
         const exists: bank | null = await prisma.categoryType.findFirst({ where: { name: categoryType.name } })
         expect(exists, `Expected categoryType with name '${categoryType.name}' to exist in the database`).to.not.be.null
+      }
+    })
+  })
+  describe('category seed test', () => {
+    it('should verify that category seed data exists in the database', async () => {
+      for (const category of dataCategory) {
+        const exists: bank | null = await prisma.category.findFirst({ where: { name: category.name } })
+        expect(exists, `Expected category with name '${category.name}' to exist in the database`).to.not.be.null
       }
     })
   })

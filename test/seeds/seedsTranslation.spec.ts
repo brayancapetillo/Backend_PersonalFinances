@@ -7,14 +7,16 @@ import chalk from 'chalk'
 import { accountTypeTranslation, categoryTranslation, categoryTypeTranslation, PrismaClient, sexTranslation } from '@prisma/client'
 
 // -Seed data imports
-import { dataSexTranslation } from '../../prisma/seeds/data/translation/sexTranslation'
-import { dataAccountTTranslation } from '../../prisma/seeds/data/translation/accountTypeTranslation'
 import { datacategoryTypeTranslation } from '../../prisma/seeds/data/translation/categoryTypeTranslation'
+import { dataAccountTTranslation } from '../../prisma/seeds/data/translation/accountTypeTranslation'
 import { dataCategoryTranslation } from '../../prisma/seeds/data/translation/categoryTranslation'
-import { sexTranslationCreate } from '@interfaces/translation/sexTranslation.interface'
-import { accountTTranslationCreate } from '@interfaces/translation/accountTypeTranslation.interface'
+import { dataSexTranslation } from '../../prisma/seeds/data/translation/sexTranslation'
+
+// -Interface imports
 import { categoryTypeTranslationCreate } from '@interfaces/translation/categoryTypeTranslation.interface'
+import { accountTTranslationCreate } from '@interfaces/translation/accountTypeTranslation.interface'
 import { categoryTranslationCreate } from '@interfaces/translation/categoryTranslation.interface'
+import { sexTranslationCreate } from '@interfaces/translation/sexTranslation.interface'
 
 // -PrismaClient instance for data base interactions
 const prisma = new PrismaClient()

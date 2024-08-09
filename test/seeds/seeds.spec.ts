@@ -116,4 +116,15 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
       }))
     })
   })
+
+  /**
+   * Closes the prismaClient connection after all test have completed.
+   *
+   * This hook is execute after all test in the suite.
+   * It ensures that PrismaClient disconnects from the database,
+   * releasing resources and preventing conecction leaks.
+   */
+  after(async () => {
+    await prisma.$disconnect()
+  })
 })

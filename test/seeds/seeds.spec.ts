@@ -12,6 +12,10 @@ import { dataAccountType } from 'prisma/seeds/data/accountType'
 import { dataLenguage } from 'prisma/seeds/data/lenguage'
 import { dataCategory } from 'prisma/seeds/data/category'
 import { dataBank } from 'prisma/seeds/data/bank'
+import { lenguageCreate } from '@interfaces/lenguage.interface'
+import { bankCreate } from '@interfaces/bank.interface'
+import { categoryTypeCreate } from '@interfaces/categoryType.interface'
+import { categoryCreate } from '@interfaces/category.interface'
 
 // -PrismaClient instance for data base interactions
 const prisma = new PrismaClient()
@@ -35,10 +39,10 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
      * With the given name exists in database.
     */
     it('should verify that lenguage seed data exists in the database', async () => {
-      for (const lang of dataLenguage) {
+      await Promise.all(dataLenguage.map(async (lang: lenguageCreate): Promise<void> => {
         const exists: lenguage | null = await prisma.lenguage.findFirst({ where: { name: lang.name } })
         expect(exists, `Expected language with name '${lang.name}' to exist in the database`).to.not.be.null
-      }
+      }))
     })
   })
 
@@ -53,10 +57,10 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
      * With the given name exists in database.
      */
     it('should verify that bank seed data exists in the database', async () => {
-      for (const bank of dataBank) {
+      await Promise.all(dataBank.map(async (bank: bankCreate): Promise<void> => {
         const exists: bank | null = await prisma.bank.findFirst({ where: { name: bank.name } })
         expect(exists, `Expected bank with name '${bank.name}' to exist in the database`).to.not.be.null
-      }
+      }))
     })
   })
 
@@ -71,10 +75,10 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
      * With the given name exists in database.
      */
     it('should verify that accountType seed data exists in the database', async () => {
-      for (const accountType of dataAccountType) {
+      await Promise.all(dataAccountType.map(async (accountType): Promise<void> => {
         const exists: bank | null = await prisma.accountType.findFirst({ where: { name: accountType.name } })
         expect(exists, `Expected accountType with name '${accountType.name}' to exist in the database`).to.not.be.null
-      }
+      }))
     })
   })
 
@@ -89,10 +93,10 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
      * With the given name exists in database.
      */
     it('should verify that categoryType seed data exists in the database', async () => {
-      for (const categoryType of dataCategoryType) {
+      await Promise.all(dataCategoryType.map(async (categoryType: categoryTypeCreate) => {
         const exists: bank | null = await prisma.categoryType.findFirst({ where: { name: categoryType.name } })
         expect(exists, `Expected categoryType with name '${categoryType.name}' to exist in the database`).to.not.be.null
-      }
+      }))
     })
   })
 
@@ -104,10 +108,10 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
    */
   describe('category seed test', () => {
     it('should verify that category seed data exists in the database', async () => {
-      for (const category of dataCategory) {
+      await Promise.all(dataCategory.map(async (category: categoryCreate): Promise<void> => {
         const exists: bank | null = await prisma.category.findFirst({ where: { name: category.name } })
         expect(exists, `Expected category with name '${category.name}' to exist in the database`).to.not.be.null
-      }
+      }))
     })
   })
 })

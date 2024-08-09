@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { expect } from 'chai'
-import { accountTypeTranslation, PrismaClient, sexTranslation } from '@prisma/client'
+import { accountTypeTranslation, categoryTypeTranslation, PrismaClient, sexTranslation } from '@prisma/client'
 import chalk from 'chalk'
 import { dataSexTranslation } from '../../prisma/seeds/data/translation/sexTranslation'
 import { dataAccountTTranslation } from '../../prisma/seeds/data/translation/accountTypeTranslation'
+import { datacategoryTypeTranslation } from '../../prisma/seeds/data/translation/categoryTypeTranslation'
 
 const prisma = new PrismaClient()
 
@@ -21,6 +22,15 @@ describe(chalk.hex('#c6a363').bold('translation seed tests 🌱'), (): void => {
       for (const accountTypeTranslation of dataAccountTTranslation) {
         const exists: accountTypeTranslation | null = await prisma.accountTypeTranslation.findFirst({ where: { name: accountTypeTranslation.name } })
         expect(exists, `Expected accountTypeTranslation with name '${accountTypeTranslation.name}' to exist in the database`).to.be.not.null
+      }
+    })
+  })
+
+  describe('categoryTypeTranslation seed test', (): void => {
+    it('should verify that categoryTypeTranslation seeds data exist in database', async (): Promise<void> => {
+      for (const categoryTypeTranslation of datacategoryTypeTranslation) {
+        const exists: categoryTypeTranslation | null = await prisma.categoryTypeTranslation.findFirst({ where: { name: categoryTypeTranslation.name } })
+        expect(exists, `Expected categoryTypeTranslation with name '${categoryTypeTranslation.name}' to exist in the database`).to.be.not.null
       }
     })
   })

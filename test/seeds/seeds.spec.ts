@@ -7,11 +7,11 @@ import chalk from 'chalk'
 import { bank, lenguage, PrismaClient } from '@prisma/client'
 
 // -Seed data imports
-import { dataCategoryType } from '../../prisma/seeds/data/categoryType'
-import { dataAccountType } from '../../prisma/seeds/data/accountType'
-import { dataLenguage } from '../../prisma/seeds/data/lenguage'
-import { dataCategory } from '../../prisma/seeds/data/category'
-import { dataBank } from '../../prisma/seeds/data/bank'
+import { dataCategoryType } from 'prisma/seeds/data/categoryType'
+import { dataAccountType } from 'prisma/seeds/data/accountType'
+import { dataLenguage } from 'prisma/seeds/data/lenguage'
+import { dataCategory } from 'prisma/seeds/data/category'
+import { dataBank } from 'prisma/seeds/data/bank'
 
 // -PrismaClient instance for data base interactions
 const prisma = new PrismaClient()

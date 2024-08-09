@@ -7,10 +7,10 @@ import chalk from 'chalk'
 import { accountTypeTranslation, categoryTranslation, categoryTypeTranslation, PrismaClient, sexTranslation } from '@prisma/client'
 
 // -Seed data imports
-import { datacategoryTypeTranslation } from '../../prisma/seeds/data/translation/categoryTypeTranslation'
-import { dataAccountTTranslation } from '../../prisma/seeds/data/translation/accountTypeTranslation'
-import { dataCategoryTranslation } from '../../prisma/seeds/data/translation/categoryTranslation'
-import { dataSexTranslation } from '../../prisma/seeds/data/translation/sexTranslation'
+import { datacategoryTypeTranslation } from 'prisma/seeds/data/translation/categoryTypeTranslation'
+import { dataAccountTTranslation } from 'prisma/seeds/data/translation/accountTypeTranslation'
+import { dataCategoryTranslation } from 'prisma/seeds/data/translation/categoryTranslation'
+import { dataSexTranslation } from 'prisma/seeds/data/translation/sexTranslation'
 
 // -Interface imports
 import { categoryTypeTranslationCreate } from '@interfaces/translation/categoryTypeTranslation.interface'

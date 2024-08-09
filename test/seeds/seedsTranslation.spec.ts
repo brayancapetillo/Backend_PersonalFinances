@@ -11,6 +11,10 @@ import { dataSexTranslation } from '../../prisma/seeds/data/translation/sexTrans
 import { dataAccountTTranslation } from '../../prisma/seeds/data/translation/accountTypeTranslation'
 import { datacategoryTypeTranslation } from '../../prisma/seeds/data/translation/categoryTypeTranslation'
 import { dataCategoryTranslation } from '../../prisma/seeds/data/translation/categoryTranslation'
+import { sexTranslationCreate } from '@interfaces/translation/sexTranslation.interface'
+import { accountTTranslationCreate } from '@interfaces/translation/accountTypeTranslation.interface'
+import { categoryTypeTranslationCreate } from '@interfaces/translation/categoryTypeTranslation.interface'
+import { categoryTranslationCreate } from '@interfaces/translation/categoryTranslation.interface'
 
 // -PrismaClient instance for data base interactions
 const prisma = new PrismaClient()
@@ -33,10 +37,16 @@ describe(chalk.hex('#c6a363').bold('translation seed tests 🌱'), (): void => {
      * with the given name exist in database.
      */
     it('should verify that sexTranslation seed data exist in database', async (): Promise<void> => {
-      for (const sexTranslation of dataSexTranslation) {
-        const exists: sexTranslation | null = await prisma.sexTranslation.findFirst({ where: { name: sexTranslation.name } })
-        expect(exists, `Expected SexTranslation with name '${sexTranslation.name}' to exist in the database`).to.be.not.null
-      }
+      await Promise.all(dataSexTranslation.map(async (sexTranslation: sexTranslationCreate) => {
+        const exists: sexTranslation | null = await prisma.sexTranslation.findFirst(
+          {
+            where: {
+              AND: [{ idSex: sexTranslation.idSex, idLenguage: sexTranslation.idLenguage, name: sexTranslation.name }]
+            }
+          }
+        )
+        expect(exists, `Expected sexTranslation with idSex ${sexTranslation.idSex}, idLenguage ${sexTranslation.idLenguage} and name '${sexTranslation.name}' to exist in the database`).to.be.not.null
+      }))
     })
   })
 
@@ -51,10 +61,16 @@ describe(chalk.hex('#c6a363').bold('translation seed tests 🌱'), (): void => {
      * with the given name exist in database.
      */
     it('should verify that accountTypeTranslation seed data exist in database', async (): Promise<void> => {
-      for (const accountTypeTranslation of dataAccountTTranslation) {
-        const exists: accountTypeTranslation | null = await prisma.accountTypeTranslation.findFirst({ where: { name: accountTypeTranslation.name } })
-        expect(exists, `Expected accountTypeTranslation with name '${accountTypeTranslation.name}' to exist in the database`).to.be.not.null
-      }
+      await Promise.all(dataAccountTTranslation.map(async (accountTTranslation: accountTTranslationCreate): Promise<void> => {
+        const exists: accountTypeTranslation | null = await prisma.accountTypeTranslation.findFirst(
+          {
+            where: {
+              AND: [{ idAccountType: accountTTranslation.idAccountType, idLenguage: accountTTranslation.idLenguage, name: accountTTranslation.name }]
+            }
+          }
+        )
+        expect(exists, `Expected accountTypeTranslation with idAccountType ${accountTTranslation.idAccountType}, idLenguage ${accountTTranslation.idLenguage} and name '${accountTTranslation.name}' to exist in the database`).to.be.not.null
+      }))
     })
   })
 
@@ -69,10 +85,16 @@ describe(chalk.hex('#c6a363').bold('translation seed tests 🌱'), (): void => {
      * with the given name exist in database.
     */
     it('should verify that categoryTypeTranslation seeds data exist in database', async (): Promise<void> => {
-      for (const categoryTypeTranslation of datacategoryTypeTranslation) {
-        const exists: categoryTypeTranslation | null = await prisma.categoryTypeTranslation.findFirst({ where: { name: categoryTypeTranslation.name } })
-        expect(exists, `Expected categoryTypeTranslation with name '${categoryTypeTranslation.name}' to exist in the database`).to.be.not.null
-      }
+      await Promise.all(datacategoryTypeTranslation.map(async (categoryTypeTranslation: categoryTypeTranslationCreate) => {
+        const exists: categoryTypeTranslation | null = await prisma.categoryTypeTranslation.findFirst(
+          {
+            where: {
+              AND: [{ idCategoryType: categoryTypeTranslation.idCategoryType, idLenguage: categoryTypeTranslation.idLenguage, name: categoryTypeTranslation.name }]
+            }
+          }
+        )
+        expect(exists, `Expected categoryTypeTranslation with idCategoryType ${categoryTypeTranslation.idCategoryType}, idLenguage ${categoryTypeTranslation.idLenguage} and name ${categoryTypeTranslation.name} to exist in the database`).to.be.not.null
+      }))
     })
   })
 
@@ -87,10 +109,27 @@ describe(chalk.hex('#c6a363').bold('translation seed tests 🌱'), (): void => {
      * with the given name exist in database.
      */
     it('should verify that categoryTranslation seeds data exist in database', async (): Promise<void> => {
-      for (const categoryTranslation of dataCategoryTranslation) {
-        const exists: categoryTranslation | null = await prisma.categoryTranslation.findFirst({ where: { name: categoryTranslation.name } })
-        expect(exists, `Expected categoryTranslation with name '${categoryTranslation.name}' to exist in the database`).to.be.not.null
-      }
+      await Promise.all(dataCategoryTranslation.map(async (categoryTranslation: categoryTranslationCreate) => {
+        const exists: categoryTranslation | null = await prisma.categoryTranslation.findFirst(
+          {
+            where: {
+              AND: [{ idCategory: categoryTranslation.idCategory, idLenguage: categoryTranslation.idLenguage, name: categoryTranslation.name }]
+            }
+          }
+        )
+        expect(exists, `Expected categoryTranslation with idCategory ${categoryTranslation.idCategory}, idLenguage ${categoryTranslation.idLenguage} and name ${categoryTranslation.name} to exist in the database`).to.be.not.null
+      }))
     })
+  })
+
+  /**
+   * Closes the prismaClient connection after all test have completed.
+   *
+   * This hook is execute after all test in the suite.
+   * It ensures that PrismaClient disconnects from the database,
+   * releasing resources and preventing conecction leaks.
+   */
+  after(async () => {
+    await prisma.$disconnect()
   })
 })

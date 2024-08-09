@@ -12,10 +12,12 @@ import { dataAccountType } from 'prisma/seeds/data/accountType'
 import { dataLenguage } from 'prisma/seeds/data/lenguage'
 import { dataCategory } from 'prisma/seeds/data/category'
 import { dataBank } from 'prisma/seeds/data/bank'
-import { lenguageCreate } from '@interfaces/lenguage.interface'
-import { bankCreate } from '@interfaces/bank.interface'
+
+// -Interface imports
 import { categoryTypeCreate } from '@interfaces/categoryType.interface'
+import { lenguageCreate } from '@interfaces/lenguage.interface'
 import { categoryCreate } from '@interfaces/category.interface'
+import { bankCreate } from '@interfaces/bank.interface'
 
 // -PrismaClient instance for data base interactions
 const prisma = new PrismaClient()
@@ -28,15 +30,15 @@ const prisma = new PrismaClient()
  */
 describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
   /**
-   * Test suite for verifying lenguage seed data.
+   * Test suite for verifying 'lenguage' seed data.
    */
 
   describe('lenguage seed test', () => {
     /**
-     * Verifies that each lenguage seed data exist in database.
+     * Verifies that each 'lenguage' seed data exist in database.
      *
-     * Iterates over the 'dataLenguage' array and checks if each lenguage
-     * With the given name exists in database.
+     * Iterates over the 'dataLenguage' array and checks if each 'lang'
+     * With the given 'name' exists in database.
     */
     it('should verify that lenguage seed data exists in the database', async () => {
       await Promise.all(dataLenguage.map(async (lang: lenguageCreate): Promise<void> => {
@@ -47,14 +49,14 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
   })
 
   /**
-   * Test suite for verifying bank seed data.
+   * Test suite for verifying 'bank' seed data.
    */
   describe('bank seed test', () => {
     /**
-     * Verifies that each bank seed data exist in database.
+     * Verifies that each 'bank' seed data exist in database.
      *
-     * Iterates over the 'dataBank' array and checks if each bank
-     * With the given name exists in database.
+     * Iterates over the 'dataBank' array and checks if each 'bank'
+     * With the given 'name' exists in database.
      */
     it('should verify that bank seed data exists in the database', async () => {
       await Promise.all(dataBank.map(async (bank: bankCreate): Promise<void> => {
@@ -65,14 +67,14 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
   })
 
   /**
-   * Test suite for verifying accountType seed exist in database.
+   * Test suite for verifying 'accountType' seed exist in database.
    */
   describe('accountType seed test', () => {
     /**
-     * Verifies that each accountType seed data exist in database.
+     * Verifies that each 'accountType' seed data exist in database.
      *
-     * Iterates over the 'dataaccountType' array and checks if each accountType
-     * With the given name exists in database.
+     * Iterates over the 'dataaccountType' array and checks if each 'accountType'
+     * With the given 'name' exists in database.
      */
     it('should verify that accountType seed data exists in the database', async () => {
       await Promise.all(dataAccountType.map(async (accountType): Promise<void> => {
@@ -83,14 +85,14 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
   })
 
   /**
-   * Test suite for verifying categoryType seed exist in database.
+   * Test suite for verifying 'categoryType' seed exist in database.
    */
   describe('categoryType seed test', () => {
     /**
-     * Verifies that each categoryType seed data exists in the database.
+     * Verifies that each 'categoryType' seed data exists in the database.
      *
-     * Iterates over the 'dataCategoryType' array and checks if each categoryType
-     * With the given name exists in database.
+     * Iterates over the 'dataCategoryType' array and checks if each 'categoryType'
+     * With the given 'name' exists in database.
      */
     it('should verify that categoryType seed data exists in the database', async () => {
       await Promise.all(dataCategoryType.map(async (categoryType: categoryTypeCreate) => {
@@ -101,10 +103,10 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
   })
 
   /**
-   * Test suite for verifying category seed exist in database.
+   * Test suite for verifying 'category' seed exist in database.
    *
-   * Iterates over the 'dataCategory' array and checks if each category
-   * with the given name exists in database.
+   * Iterates over the 'dataCategory' array and checks if each 'category'
+   * with the given 'name' exists in database.
    */
   describe('category seed test', () => {
     it('should verify that category seed data exists in the database', async () => {

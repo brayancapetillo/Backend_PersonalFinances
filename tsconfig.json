@@ -8,9 +8,17 @@
 
     "baseUrl": ".",
     "paths": {
-      "@config/*": ["src/config/*"],
-      "@interfaces/*": ["src/interfaces/*"],
-      "@type/*": ["src/types/*"]
+      "@prisma/*": ["./prisma/*"],
+      "@application/*": ["./src/application/*"],
+      "@domain/*": ["./src/domain/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@application-services/*": ["./src/application-services/*"],
+      "@presentation/*": ["./src/presentation/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@tests/*": ["./tests/*"],
+      "@type/*": ["./src/shared/types/*"],
+      "@dtos/*": ["./src/application/dtos/*"]
     },
 
     "sourceMap": true,

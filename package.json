@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/index.ts",
-    "db:seed": "ts-node-dev prisma/seeds/seeds.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/main/index.ts",
+    "db:seed": "ts-node-dev -r tsconfig-paths/register prisma/seeds/seeds.ts",
     "lint": "eslint .",
     "tsc": "tsc",
     "test": "mocha",

@@ -1,4 +1,4 @@
-import { categoryTranslationCreate } from '@interfaces/translation/categoryTranslation.interface'
+import { categoryTranslationCreate } from '@application/dtos/categoryTranslation.dto'
 
 export const dataCategoryTranslation: categoryTranslationCreate[] = [
   // Español

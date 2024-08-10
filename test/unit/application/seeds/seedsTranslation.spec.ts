@@ -4,7 +4,10 @@ import { expect } from 'chai'
 import chalk from 'chalk'
 
 // -Prisma imports
-import { accountTypeTranslation, categoryTranslation, categoryTypeTranslation, PrismaClient, sexTranslation } from '@prisma/client'
+import { accountTypeTranslation, categoryTranslation, categoryTypeTranslation, sexTranslation } from '@prisma/client'
+
+// - Prisma client
+import prisma from '@infrastructure/database/prismaClient'
 
 // -Seed data imports
 import { datacategoryTypeTranslation } from 'prisma/seeds/data/translation/categoryTypeTranslation'
@@ -13,13 +16,10 @@ import { dataCategoryTranslation } from 'prisma/seeds/data/translation/categoryT
 import { dataSexTranslation } from 'prisma/seeds/data/translation/sexTranslation'
 
 // -Interface imports
-import { categoryTypeTranslationCreate } from '@interfaces/translation/categoryTypeTranslation.interface'
-import { accountTTranslationCreate } from '@interfaces/translation/accountTypeTranslation.interface'
-import { categoryTranslationCreate } from '@interfaces/translation/categoryTranslation.interface'
-import { sexTranslationCreate } from '@interfaces/translation/sexTranslation.interface'
-
-// -PrismaClient instance for data base interactions
-const prisma = new PrismaClient()
+import { categoryTypeTranslationCreate } from '@dtos/categoryTypeTranslation.dto'
+import { accountTTranslationCreate } from '@dtos/accountTypeTranslation.dto'
+import { categoryTranslationCreate } from '@dtos/categoryTranslation.dto'
+import { sexTranslationCreate } from '@dtos/sexTranslation.dto'
 
 /**
  * Test suite for verifying the existence of seed data translations in the database.
@@ -122,16 +122,5 @@ describe(chalk.hex('#c6a363').bold('translation seed tests 🌱'), (): void => {
         expect(exists, `Expected categoryTranslation with idCategory ${categoryTranslation.idCategory}, idLenguage ${categoryTranslation.idLenguage} and name ${categoryTranslation.name} to exist in the database`).to.be.not.null
       }))
     })
-  })
-
-  /**
-   * Closes the prismaClient connection after all test have completed.
-   *
-   * This hook is execute after all test in the suite.
-   * It ensures that PrismaClient disconnects from the database,
-   * releasing resources and preventing conecction leaks.
-   */
-  after(async () => {
-    await prisma.$disconnect()
   })
 })

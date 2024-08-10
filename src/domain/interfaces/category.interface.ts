@@ -5,5 +5,3 @@ export interface category extends Omit<categoryPrisma, 'name' | 'idCategoryType'
   name: tcategoryName
   idCategoryType: tidCategoryType
 }
-
-export type categoryCreate = Pick<category, 'name' | 'idCategoryType'>

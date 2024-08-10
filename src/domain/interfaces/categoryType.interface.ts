@@ -4,5 +4,3 @@ import { tcategoryType } from '@type/categoryType.type'
 export interface categoryType extends Omit<categoryTypePrisma, 'name'> {
   name: tcategoryType
 }
-
-export type categoryTypeCreate = Pick<categoryType, 'name'>

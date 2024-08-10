@@ -1,7 +1,7 @@
 import express, { Express } from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
-import { conenv } from './config/config'
+import { conenv } from '@shared/config/config'
 
 const app: Express = express()
 

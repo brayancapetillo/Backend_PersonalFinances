@@ -1,8 +1,13 @@
-// -Import necessary modules
-import { accountType, accountTypeTranslation, bank, category, categoryTranslation, categoryType, categoryTypeTranslation, lenguage, PrismaClient, sex, sexTranslation } from '@prisma/client'
+// -Library and tool imports
 import chalk from 'chalk'
 
-// -Data Imports
+// - Prisma imports
+import { accountType, accountTypeTranslation, bank, category, categoryTranslation, categoryType, categoryTypeTranslation, lenguage, sex, sexTranslation } from '@prisma/client'
+
+// - Prisma client
+import prisma from '@infrastructure/database/prismaClient'
+
+// -Data imports
 import { dataCategoryType } from './data/categoryType'
 import { dataAccountType } from './data/accountType'
 import { dataCategory } from './data/category'
@@ -16,22 +21,19 @@ import { dataAccountTTranslation } from './data/translation/accountTypeTranslati
 import { dataCategoryTranslation } from './data/translation/categoryTranslation'
 import { dataSexTranslation } from './data/translation/sexTranslation'
 
-// -Interface imports
-import { categoryTypeCreate } from '@interfaces/categoryType.interface'
-import { accountTypeCreate } from '@interfaces/accountType.interface'
-import { categoryCreate } from '@interfaces/category.interface'
-import { lenguageCreate } from '@interfaces/lenguage.interface'
-import { bankCreate } from '@interfaces/bank.interface'
-import { sexCreate } from '@interfaces/sex.interface'
+// -DTO imports
+import { categoryTypeCreate } from '@dtos/categoryType.dto'
+import { accountTypeCreate } from '@dtos/accountType.dto'
+import { categoryCreate } from '@dtos/category.dto'
+import { lenguageCreate } from '@dtos/lenguage.dto'
+import { bankCreate } from '@dtos/bank.dto'
+import { sexCreate } from '@dtos/sex.dto'
 
-// -Translation interface imports
-import { categoryTypeTranslationCreate } from '@interfaces/translation/categoryTypeTranslation.interface'
-import { accountTTranslationCreate } from '@interfaces/translation/accountTypeTranslation.interface'
-import { categoryTranslationCreate } from '@interfaces/translation/categoryTranslation.interface'
-import { sexTranslationCreate } from '@interfaces/translation/sexTranslation.interface'
-
-// Instantiate Prisma Client to interact with the database
-const prisma = new PrismaClient()
+// -Translation DTO imports
+import { categoryTypeTranslationCreate } from '@dtos/categoryTypeTranslation.dto'
+import { accountTTranslationCreate } from '@dtos/accountTypeTranslation.dto'
+import { categoryTranslationCreate } from '@dtos/categoryTranslation.dto'
+import { sexTranslationCreate } from '@dtos/sexTranslation.dto'
 
 /**
  * Insert an array of data into database using a specefied create function.
@@ -101,9 +103,6 @@ const main = async (): Promise<void> => {
   } catch (error) {
     // Log an error message if an unexpected error occurs
     console.error(chalk.red('An unexpected error occurred:'), error)
-  } finally {
-    // Disconnect from the Prisma client
-    await prisma.$disconnect()
   }
 }
 

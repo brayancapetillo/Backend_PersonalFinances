@@ -1,4 +1,4 @@
-import { bankCreate } from '@interfaces/bank.interface'
+import { bankCreate } from '@application/dtos/bank.dto'
 
 export const dataBank: bankCreate[] = [
   { name: 'BBVA Bancomer' },

@@ -4,5 +4,3 @@ import { taccountType } from '@type/accountType.type'
 export interface accountType extends Omit<accountTypePrisma, 'name'> {
   name: taccountType
 }
-
-export type accountTypeCreate = Pick<accountType, 'name'>

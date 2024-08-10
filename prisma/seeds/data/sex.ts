@@ -1,4 +1,4 @@
-import { sexCreate } from '@interfaces/sex.interface'
+import { sexCreate } from '@application/dtos/sex.dto'
 
 export const dataSex: sexCreate[] = [
   { name: 'none' },

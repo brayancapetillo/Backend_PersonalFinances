@@ -4,5 +4,3 @@ import { typeBank } from '@type/bank.type'
 export interface bank extends Omit<bankPrisma, 'name'> {
   name: typeBank
 }
-
-export type bankCreate = Pick<bank, 'name'>

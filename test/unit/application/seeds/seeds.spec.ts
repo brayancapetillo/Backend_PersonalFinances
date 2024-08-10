@@ -4,7 +4,10 @@ import { expect } from 'chai'
 import chalk from 'chalk'
 
 // -Prisma imports
-import { bank, lenguage, PrismaClient } from '@prisma/client'
+import { accountType, bank, lenguage } from '@prisma/client'
+
+// - Prisma client
+import prisma from '@infrastructure/database/prismaClient'
 
 // -Seed data imports
 import { dataCategoryType } from 'prisma/seeds/data/categoryType'
@@ -14,13 +17,10 @@ import { dataCategory } from 'prisma/seeds/data/category'
 import { dataBank } from 'prisma/seeds/data/bank'
 
 // -Interface imports
-import { categoryTypeCreate } from '@interfaces/categoryType.interface'
-import { lenguageCreate } from '@interfaces/lenguage.interface'
-import { categoryCreate } from '@interfaces/category.interface'
-import { bankCreate } from '@interfaces/bank.interface'
-
-// -PrismaClient instance for data base interactions
-const prisma = new PrismaClient()
+import { categoryTypeCreate } from '@dtos/categoryType.dto'
+import { lenguageCreate } from '@dtos/lenguage.dto'
+import { categoryCreate } from '@dtos/category.dto'
+import { bankCreate } from '@dtos/bank.dto'
 
 /**
  * Test suite for verifying the existence of data seeds in the database.
@@ -78,7 +78,7 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
      */
     it('should verify that accountType seed data exists in the database', async () => {
       await Promise.all(dataAccountType.map(async (accountType): Promise<void> => {
-        const exists: bank | null = await prisma.accountType.findFirst({ where: { name: accountType.name } })
+        const exists: accountType | null = await prisma.accountType.findFirst({ where: { name: accountType.name } })
         expect(exists, `Expected accountType with name '${accountType.name}' to exist in the database`).to.not.be.null
       }))
     })
@@ -115,16 +115,5 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
         expect(exists, `Expected category with name '${category.name}' to exist in the database`).to.not.be.null
       }))
     })
-  })
-
-  /**
-   * Closes the prismaClient connection after all test have completed.
-   *
-   * This hook is execute after all test in the suite.
-   * It ensures that PrismaClient disconnects from the database,
-   * releasing resources and preventing conecction leaks.
-   */
-  after(async () => {
-    await prisma.$disconnect()
   })
 })

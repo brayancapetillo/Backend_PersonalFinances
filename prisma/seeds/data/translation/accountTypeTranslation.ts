@@ -1,4 +1,4 @@
-import { accountTTranslationCreate } from '@interfaces/translation/accountTypeTranslation.interface'
+import { accountTTranslationCreate } from '@application/dtos/accountTypeTranslation.dto'
 
 export const dataAccountTTranslation: accountTTranslationCreate[] = [
   // Español

@@ -1,4 +1,4 @@
-import { sexTranslationCreate } from '@interfaces/translation/sexTranslation.interface'
+import { sexTranslationCreate } from '@application/dtos/sexTranslation.dto'
 
 export const dataSexTranslation: sexTranslationCreate[] = [
   // Español

@@ -1,4 +1,4 @@
-import { accountTypeCreate } from '@interfaces/accountType.interface'
+import { accountTypeCreate } from '@application/dtos/accountType.dto'
 
 export const dataAccountType: accountTypeCreate[] = [
   { name: 'Debit' },

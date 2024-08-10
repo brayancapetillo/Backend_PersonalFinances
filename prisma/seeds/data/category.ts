@@ -1,4 +1,4 @@
-import { categoryCreate } from '@interfaces/category.interface'
+import { categoryCreate } from '@application/dtos/category.dto'
 
 export const dataCategory: categoryCreate[] = [
   { name: 'Salary', idCategoryType: 1 },

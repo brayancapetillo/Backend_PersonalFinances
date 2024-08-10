@@ -1,1 +1,0 @@
-export type tcategoryType = 'Income' | 'Fixed Expenses' | 'Variable Expenses' | 'Savings and Investments' | 'Debts' | 'Home' | 'Health and Wellness' | 'Education' | 'Pets' | 'Donations and Charity' | 'Taxes' | 'Leisure and Vacations' | 'Technology'

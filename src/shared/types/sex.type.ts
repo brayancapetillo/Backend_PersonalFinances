@@ -1,1 +1,1 @@
-export type typeSex = 'none' | 'Male' | 'Female'
+export type tSex = 'none' | 'Male' | 'Female'

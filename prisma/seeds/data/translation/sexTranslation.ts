@@ -1,6 +1,6 @@
-import { sexTranslationCreate } from '@application/dtos/sexTranslation.dto'
+import { sexTranslation } from '@prisma/client'
 
-export const dataSexTranslation: sexTranslationCreate[] = [
+export const dataSexTranslation: Array<Pick<sexTranslation, 'idSex' | 'idLenguage' | 'name'>> = [
   // Español
   { idSex: 1, idLenguage: 1, name: 'Ninguno' },
   { idSex: 2, idLenguage: 1, name: 'Masculino' },

@@ -15,12 +15,6 @@ import { dataAccountTTranslation } from 'prisma/seeds/data/translation/accountTy
 import { dataCategoryTranslation } from 'prisma/seeds/data/translation/categoryTranslation'
 import { dataSexTranslation } from 'prisma/seeds/data/translation/sexTranslation'
 
-// -Interface imports
-import { categoryTypeTranslationCreate } from '@dtos/categoryTypeTranslation.dto'
-import { accountTTranslationCreate } from '@dtos/accountTypeTranslation.dto'
-import { categoryTranslationCreate } from '@dtos/categoryTranslation.dto'
-import { sexTranslationCreate } from '@dtos/sexTranslation.dto'
-
 /**
  * Test suite for verifying the existence of seed data translations in the database.
  *
@@ -39,7 +33,7 @@ describe(chalk.hex('#c6a363').bold('translation seed tests 🌱'), (): void => {
      * with the given 'idSex', 'idLenguage', and 'name' exists in database.
      */
     it('should verify that sexTranslation seed data exist in database', async (): Promise<void> => {
-      await Promise.all(dataSexTranslation.map(async (sexTranslation: sexTranslationCreate): Promise<void> => {
+      await Promise.all(dataSexTranslation.map(async (sexTranslation: Pick<sexTranslation, 'idSex' | 'idLenguage' | 'name'>): Promise<void> => {
         const exists: sexTranslation | null = await prisma.sexTranslation.findFirst(
           {
             where: {
@@ -63,7 +57,7 @@ describe(chalk.hex('#c6a363').bold('translation seed tests 🌱'), (): void => {
      * with the given 'idAccountType', 'idLenguage', and name exist in database.
      */
     it('should verify that accountTypeTranslation seed data exist in database', async (): Promise<void> => {
-      await Promise.all(dataAccountTTranslation.map(async (accountTTranslation: accountTTranslationCreate): Promise<void> => {
+      await Promise.all(dataAccountTTranslation.map(async (accountTTranslation: Pick<accountTypeTranslation, 'idAccountType' | 'idLenguage' | 'name'>): Promise<void> => {
         const exists: accountTypeTranslation | null = await prisma.accountTypeTranslation.findFirst(
           {
             where: {
@@ -87,7 +81,7 @@ describe(chalk.hex('#c6a363').bold('translation seed tests 🌱'), (): void => {
      * with the given 'idCategoryType', 'idLenguage', and 'name' exist in database.
     */
     it('should verify that categoryTypeTranslation seeds data exist in database', async (): Promise<void> => {
-      await Promise.all(datacategoryTypeTranslation.map(async (categoryTypeTranslation: categoryTypeTranslationCreate): Promise<void> => {
+      await Promise.all(datacategoryTypeTranslation.map(async (categoryTypeTranslation: Pick<categoryTypeTranslation, 'idCategoryType' | 'idLenguage' | 'name'>): Promise<void> => {
         const exists: categoryTypeTranslation | null = await prisma.categoryTypeTranslation.findFirst(
           {
             where: {
@@ -111,7 +105,7 @@ describe(chalk.hex('#c6a363').bold('translation seed tests 🌱'), (): void => {
      * with the given 'idCategory', 'idLenguage', and 'name' exist in database.
      */
     it('should verify that categoryTranslation seeds data exist in database', async (): Promise<void> => {
-      await Promise.all(dataCategoryTranslation.map(async (categoryTranslation: categoryTranslationCreate): Promise<void> => {
+      await Promise.all(dataCategoryTranslation.map(async (categoryTranslation: Pick<categoryTranslation, 'idCategory' | 'idLenguage' | 'name'>): Promise<void> => {
         const exists: categoryTranslation | null = await prisma.categoryTranslation.findFirst(
           {
             where: {

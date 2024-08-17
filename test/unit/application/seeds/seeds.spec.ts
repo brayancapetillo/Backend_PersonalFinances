@@ -4,7 +4,14 @@ import { expect } from 'chai'
 import chalk from 'chalk'
 
 // -Prisma imports
-import { accountType, bank, lenguage } from '@prisma/client'
+import { accountType, bank, category, categoryType, lenguage } from '@prisma/client'
+
+// -Entities imports
+import { CategoryType } from '@domain/entities/categoryType.entity'
+import { AccountType } from '@domain/entities/accountType.entity'
+import { Lenguage } from '@domain/entities/lenguage.entity'
+import { Category } from '@domain/entities/category.entity'
+import { Bank } from '@domain/entities/bank,entity'
 
 // - Prisma client
 import prisma from '@infrastructure/database/prismaClient'
@@ -15,12 +22,6 @@ import { dataAccountType } from 'prisma/seeds/data/accountType'
 import { dataLenguage } from 'prisma/seeds/data/lenguage'
 import { dataCategory } from 'prisma/seeds/data/category'
 import { dataBank } from 'prisma/seeds/data/bank'
-
-// -Interface imports
-import { categoryTypeCreate } from '@dtos/categoryType.dto'
-import { lenguageCreate } from '@dtos/lenguage.dto'
-import { categoryCreate } from '@dtos/category.dto'
-import { bankCreate } from '@dtos/bank.dto'
 
 /**
  * Test suite for verifying the existence of data seeds in the database.
@@ -41,7 +42,7 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
      * With the given 'name' exists in database.
     */
     it('should verify that lenguage seed data exists in the database', async () => {
-      await Promise.all(dataLenguage.map(async (lang: lenguageCreate): Promise<void> => {
+      await Promise.all(dataLenguage.map(async (lang: Pick<Lenguage, 'name' | 'code'>): Promise<void> => {
         const exists: lenguage | null = await prisma.lenguage.findFirst({ where: { name: lang.name } })
         expect(exists, `Expected language with name '${lang.name}' to exist in the database`).to.not.be.null
       }))
@@ -59,7 +60,7 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
      * With the given 'name' exists in database.
      */
     it('should verify that bank seed data exists in the database', async () => {
-      await Promise.all(dataBank.map(async (bank: bankCreate): Promise<void> => {
+      await Promise.all(dataBank.map(async (bank: Pick<Bank, 'name'>): Promise<void> => {
         const exists: bank | null = await prisma.bank.findFirst({ where: { name: bank.name } })
         expect(exists, `Expected bank with name '${bank.name}' to exist in the database`).to.not.be.null
       }))
@@ -77,7 +78,7 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
      * With the given 'name' exists in database.
      */
     it('should verify that accountType seed data exists in the database', async () => {
-      await Promise.all(dataAccountType.map(async (accountType): Promise<void> => {
+      await Promise.all(dataAccountType.map(async (accountType: Pick<AccountType, 'name'>): Promise<void> => {
         const exists: accountType | null = await prisma.accountType.findFirst({ where: { name: accountType.name } })
         expect(exists, `Expected accountType with name '${accountType.name}' to exist in the database`).to.not.be.null
       }))
@@ -95,8 +96,8 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
      * With the given 'name' exists in database.
      */
     it('should verify that categoryType seed data exists in the database', async () => {
-      await Promise.all(dataCategoryType.map(async (categoryType: categoryTypeCreate) => {
-        const exists: bank | null = await prisma.categoryType.findFirst({ where: { name: categoryType.name } })
+      await Promise.all(dataCategoryType.map(async (categoryType: Pick<CategoryType, 'name'>) => {
+        const exists: categoryType | null = await prisma.categoryType.findFirst({ where: { name: categoryType.name } })
         expect(exists, `Expected categoryType with name '${categoryType.name}' to exist in the database`).to.not.be.null
       }))
     })
@@ -110,8 +111,8 @@ describe(chalk.hex('#c6a363').bold('seed tests 🌱'), () => {
    */
   describe('category seed test', () => {
     it('should verify that category seed data exists in the database', async () => {
-      await Promise.all(dataCategory.map(async (category: categoryCreate): Promise<void> => {
-        const exists: bank | null = await prisma.category.findFirst({ where: { name: category.name } })
+      await Promise.all(dataCategory.map(async (category: Pick<Category, 'idCategoryType' | 'name'>): Promise<void> => {
+        const exists: category | null = await prisma.category.findFirst({ where: { name: category.name } })
         expect(exists, `Expected category with name '${category.name}' to exist in the database`).to.not.be.null
       }))
     })

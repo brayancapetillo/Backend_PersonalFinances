@@ -1,6 +1,6 @@
-import { categoryTranslationCreate } from '@application/dtos/categoryTranslation.dto'
+import { categoryTranslation } from '@prisma/client'
 
-export const dataCategoryTranslation: categoryTranslationCreate[] = [
+export const dataCategoryTranslation: Array<Pick<categoryTranslation, 'idCategory' | 'idLenguage' | 'name'>> = [
   // Español
   { idCategory: 1, idLenguage: 1, name: 'Salario' },
   { idCategory: 2, idLenguage: 1, name: 'Inversiones' },

@@ -1,6 +1,6 @@
-import { bankCreate } from '@application/dtos/bank.dto'
+import { Bank } from '@domain/entities/bank,entity'
 
-export const dataBank: bankCreate[] = [
+export const dataBank: Array<Pick<Bank, 'name'>> = [
   { name: 'BBVA Bancomer' },
   { name: 'Citibanamex' },
   { name: 'Santander México' },

@@ -1,6 +1,6 @@
-import { categoryTypeCreate } from '@application/dtos/categoryType.dto'
+import { CategoryType } from '@domain/entities/categoryType.entity'
 
-export const dataCategoryType: categoryTypeCreate[] = [
+export const dataCategoryType: Array<Pick<CategoryType, 'name'>> = [
   { name: 'Income' },
   { name: 'Fixed Expenses' },
   { name: 'Variable Expenses' },

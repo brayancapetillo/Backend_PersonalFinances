@@ -1,6 +1,6 @@
-import { accountTTranslationCreate } from '@application/dtos/accountTypeTranslation.dto'
+import { accountTypeTranslation } from '@prisma/client'
 
-export const dataAccountTTranslation: accountTTranslationCreate[] = [
+export const dataAccountTTranslation: Array<Pick<accountTypeTranslation, 'idAccountType' | 'idLenguage' | 'name'>> = [
   // Español
   { idAccountType: 1, idLenguage: 1, name: 'Débito' },
   { idAccountType: 2, idLenguage: 1, name: 'Crédito' },

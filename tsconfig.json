@@ -18,7 +18,8 @@
       "@middlewares/*": ["./src/middlewares/*"],
       "@tests/*": ["./tests/*"],
       "@type/*": ["./src/shared/types/*"],
-      "@dtos/*": ["./src/application/dtos/*"]
+      "@dtos/*": ["./src/application/dtos/*"],
+      "@utils/*": ["./src/shared/utils"]
     },
 
     "sourceMap": true,

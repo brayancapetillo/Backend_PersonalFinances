@@ -1,5 +1,8 @@
-import { registerUserPFDTO } from '@application/dtos/userPF/registerUserPF'
+import { successStatusCodes } from '@shared/constants/http/successStatusCode'
 import { RegisterUserPF } from '@application/use-cases/userPF/registerUserPF'
+import { registerUserPFDTO } from '@application/dtos/userPF/registerUserPF'
+import { errorResponseHttp } from '@shared/utils/errorResponseHttp'
+import { successResponseHttp } from '@shared/utils/successResponseHttp'
 import { UserPF } from '@domain/entities/userPF.entity'
 import { Request, Response } from 'express'
 
@@ -10,13 +13,11 @@ export class UserPFController {
     try {
       const userPFDTO: registerUserPFDTO = req.body
 
-      const ResUserPF: UserPF = await this.registerUserPF.execute(userPFDTO)
+      const resUserPF: UserPF = await this.registerUserPF.execute(userPFDTO)
 
-      res.status(201).send(ResUserPF)
-    } catch (e) {
-      console.log(e)
-
-      res.status(500).send(e)
+      successResponseHttp<UserPF>(res, { statusCode: successStatusCodes.CREATED, data: resUserPF, message: 'user successfully created' })
+    } catch (error: any) {
+      void errorResponseHttp(res, error)
     }
   }
 }

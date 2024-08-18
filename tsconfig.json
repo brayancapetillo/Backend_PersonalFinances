@@ -19,7 +19,8 @@
       "@tests/*": ["./tests/*"],
       "@type/*": ["./src/shared/types/*"],
       "@dtos/*": ["./src/application/dtos/*"],
-      "@utils/*": ["./src/shared/utils"]
+      "@utils/*": ["./src/shared/utils"],
+      "@constants/*": ["./src/shared/constants"]
     },
 
     "sourceMap": true,

@@ -3,8 +3,8 @@ import { RegisterUserPF } from '@application/use-cases/userPF/registerUserPF'
 import { registerUserPFDTO } from '@application/dtos/userPF/registerUserPF'
 import { errorResponseHttp } from '@shared/utils/errorResponseHttp'
 import { successResponseHttp } from '@shared/utils/successResponseHttp'
-import { UserPF } from '@domain/entities/userPF.entity'
 import { Request, Response } from 'express'
+import { userSummaryDTO } from '@application/dtos/userPF/userSummary'
 
 export class UserPFController {
   constructor (private readonly registerUserPF: RegisterUserPF) {}
@@ -13,9 +13,9 @@ export class UserPFController {
     try {
       const userPFDTO: registerUserPFDTO = req.body
 
-      const resUserPF: UserPF = await this.registerUserPF.execute(userPFDTO)
+      const resUserPF: userSummaryDTO = await this.registerUserPF.execute(userPFDTO)
 
-      successResponseHttp<UserPF>(res, { statusCode: successStatusCodes.CREATED, data: resUserPF, message: 'user successfully created' })
+      successResponseHttp<userSummaryDTO>(res, { statusCode: successStatusCodes.CREATED, data: resUserPF, message: 'user successfully created' })
     } catch (error: any) {
       void errorResponseHttp(res, error)
     }

@@ -16,7 +16,7 @@ export class UserPFPrismaRepository implements UserPFRepository {
   }
 
   async findByPhone (phone: string): Promise<UserPF | null> {
-    const user: prismaUserPF | null = await prisma.userPF.findUnique({ where: { phone } })
+    const user: prismaUserPF | null = await prisma.userPF.findFirst({ where: { phone } })
     return user !== null ? this.toDomain(user) : null
   }
 

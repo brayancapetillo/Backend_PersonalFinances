@@ -2,7 +2,7 @@
 import { registerUserPFDTO } from '@application/dtos/userPF/registerUserPF'
 import { userSummaryDTO } from '@application/dtos/userPF/userSummary'
 import { UserPF } from '@domain/entities/userPF.entity'
-import { UserPFPrismaRepository } from '@infrastructure/database/prisma-repositories/userPF/userPFPrismaRepository'
+import { UserPFPrismaRepository } from '@infrastructure/repositories/prisma/userPF/userPFPrismaRepository'
 import { conenv } from '@shared/config/config'
 import { clientErrorStatusCodes } from '@shared/constants/http/clientErroStatusCode'
 import { HttpError } from '@shared/utils/error/httpError'

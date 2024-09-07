@@ -1,7 +1,7 @@
 import { UserPF } from '@domain/entities/userPF.entity'
 import { UserPFRepository } from '@domain/interfaces/UserPFRepository'
 
-import prisma from '@infrastructure/database/prismaClient'
+import prisma from '@infrastructure/database/prisma/prismaClient'
 import { userPF as prismaUserPF } from '@prisma/client'
 
 export class UserPFPrismaRepository implements UserPFRepository {

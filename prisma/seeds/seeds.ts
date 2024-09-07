@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import { accountType, accountTypeTranslation, bank, category, categoryTranslation, categoryType, categoryTypeTranslation, lenguage, sex, sexTranslation } from '@prisma/client'
 
 // - Prisma client
-import prisma from '@infrastructure/database/prismaClient'
+import prisma from '@infrastructure/database/prisma/prismaClient'
 
 // -DTOs imports
 import { createSex } from '@application/dtos/createSex.dto'

@@ -7,7 +7,7 @@
     "db:seed": "ts-node-dev -r tsconfig-paths/register prisma/seeds/seeds.ts",
     "lint": "eslint .",
     "tsc": "tsc",
-    "test": "mocha",
+    "test:dev": "cross-env NODE_ENV=development mocha",
     "prepare": "husky"
   },
   "keywords": [],
@@ -24,7 +24,7 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.14.2",
     "chai": "^4.3.7",
-    "chai-http": "^5.0.0",
+    "chai-http": "^4.4.0",
     "cross-env": "^7.0.3",
     "husky": "^9.1.4",
     "lint-staged": "^15.2.8",

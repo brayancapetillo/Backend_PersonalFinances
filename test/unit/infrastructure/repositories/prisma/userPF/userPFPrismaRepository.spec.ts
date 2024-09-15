@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 // -Library and tool imports
-import proxyquire from 'proxyquire'
 import { expect } from 'chai'
 import Sinon from 'sinon'
 import chalk from 'chalk'
@@ -11,6 +10,9 @@ import { UserPF } from '@domain/entities/userPF.entity'
 
 // -Prisma mock imports
 import { createPrismaMock } from 'test/mocks/prisma/prismaMock'
+import { userPFMock } from 'test/mocks/userPF/userPFMock'
+import { UserPFPrismaRepository } from '@infrastructure/repositories/prisma/userPF/userPFPrismaRepository'
+import { PrismaClient } from '@prisma/client'
 
 /**
  * Tests for the 'UserPF' prisma repository.
@@ -30,20 +32,7 @@ describe(chalk.hex('#c6a363').bold('UserPF Prisma Repository tests 📚'), () =>
     /**
      * Mock instance of the 'USerPF' entity.
      */
-    const mockPrismaUserPF: UserPF = new UserPF(
-      1,
-      'brayancapeto@example.com',
-      'brayan capetillo',
-      null,
-      null,
-      '4493465148',
-      1,
-      1,
-      'password123',
-      false,
-      new Date(),
-      new Date()
-    )
+    const mockPrismaUserPF: UserPF = userPFMock
 
     /**
      * setup before each test case.
@@ -52,13 +41,8 @@ describe(chalk.hex('#c6a363').bold('UserPF Prisma Repository tests 📚'), () =>
       // Create mock of prisma and methods
       prismaMock = createPrismaMock()
 
-      // Load the UserPFPrismaRepository module, replacing the prisma instance with the created mock
-      const { UserPFPrismaRepository } = proxyquire.noCallThru()('@infrastructure/repositories/prisma/userPF/userPFPrismaRepository', {
-        '@infrastructure/database/prisma/prismaClient': prismaMock
-      })
-
       // Create mock userPFPrismaRepository
-      userPFPrismaRepository = new UserPFPrismaRepository()
+      userPFPrismaRepository = new UserPFPrismaRepository(prismaMock as unknown as PrismaClient)
     })
 
     /**
@@ -198,7 +182,7 @@ describe(chalk.hex('#c6a363').bold('UserPF Prisma Repository tests 📚'), () =>
 
       prismaMock.userPF.create.resolves(mockPrismaUserPF)
 
-      const result: UserPF = await userPFPrismaRepository.register(userInstance)
+      const result: UserPF = await userPFPrismaRepository.create(userInstance)
 
       expect(result).to.be.instanceOf(UserPF)
       expect(result).to.deep.equal(mockPrismaUserPF)

@@ -1,27 +1,30 @@
 import { UserPF } from '@domain/entities/userPF.entity'
 import { UserPFRepository } from '@domain/interfaces/UserPFRepository'
 
-import prisma from '@infrastructure/database/prisma/prismaClient'
-import { userPF as prismaUserPF } from '@prisma/client'
+import { PrismaClient, userPF as prismaUserPF } from '@prisma/client'
 
 export class UserPFPrismaRepository implements UserPFRepository {
-  async findById (id: number): Promise<UserPF | null> {
-    const user: prismaUserPF | null = await prisma.userPF.findUnique({ where: { id } })
+  private readonly prisma: PrismaClient
+
+  constructor (prisma: PrismaClient) { this.prisma = prisma }
+
+  public async findById (id: number): Promise<UserPF | null> {
+    const user: prismaUserPF | null = await this.prisma.userPF.findUnique({ where: { id } })
     return user !== null ? this.toDomain(user) : null
   }
 
-  async findByEmail (email: string): Promise<UserPF | null> {
-    const user: prismaUserPF | null = await prisma.userPF.findUnique({ where: { email } })
+  public async findByEmail (email: string): Promise<UserPF | null> {
+    const user: prismaUserPF | null = await this.prisma.userPF.findUnique({ where: { email } })
     return user !== null ? this.toDomain(user) : null
   }
 
-  async findByPhone (phone: string): Promise<UserPF | null> {
-    const user: prismaUserPF | null = await prisma.userPF.findFirst({ where: { phone } })
+  public async findByPhone (phone: string): Promise<UserPF | null> {
+    const user: prismaUserPF | null = await this.prisma.userPF.findFirst({ where: { phone } })
     return user !== null ? this.toDomain(user) : null
   }
 
-  async register (user: UserPF): Promise<UserPF> {
-    const savedUser: prismaUserPF = await prisma.userPF.create(
+  public async create (user: UserPF): Promise<UserPF> {
+    const savedUser: prismaUserPF = await this.prisma.userPF.create(
       {
         data:
                 {

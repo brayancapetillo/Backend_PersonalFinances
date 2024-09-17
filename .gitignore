@@ -4,6 +4,9 @@
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 node_modules/
 
+# Prisma directories
+prisma/migrations/
+
 # build / generate output
 dist/
 

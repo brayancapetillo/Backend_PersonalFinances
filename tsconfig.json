@@ -3,12 +3,24 @@
     "target": "es2016",
     "module": "commonjs",
     "moduleResolution": "Node",
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
 
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@config/*": ["./src/config/*"]
+      "@prisma/*": ["./prisma/*"],
+      "@application/*": ["./src/application/*"],
+      "@domain/*": ["./src/domain/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@application-services/*": ["./src/application-services/*"],
+      "@presentation/*": ["./src/presentation/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@tests/*": ["./tests/*"],
+      "@type/*": ["./src/shared/types/*"],
+      "@dtos/*": ["./src/application/dtos/*"],
+      "@utils/*": ["./src/shared/utils"],
+      "@constants/*": ["./src/shared/constants"]
     },
 
     "sourceMap": true,
@@ -24,6 +36,6 @@
     "skipLibCheck": true
   },
 
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "prisma/**/*", "test/**/*"],
   "exclude": ["node_modules", "dist"]
 }

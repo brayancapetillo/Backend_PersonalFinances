@@ -5,6 +5,7 @@
   "extends": ["./node_modules/ts-standard/eslintrc.json"],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "error",
-    "@typescript-eslint/restrict-plus-operands": "off"
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "@typescript-eslint/no-misused-promises": "off"
   }
 }

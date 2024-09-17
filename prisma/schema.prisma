@@ -1,0 +1,175 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model userPF {
+  id         Int       @id @default(autoincrement())
+  email      String    @unique @db.NVarChar(255)
+  name       String    @db.NVarChar(255)
+  lastName   String?   @db.NVarChar(255)
+  birthday   DateTime?
+  phone      String?   @unique @db.NVarChar(12)
+  idSex      Int
+  idLenguage Int
+  password   String
+  verify     Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  sex        sex       @relation(fields: [idSex], references: [id])
+  lenguage   lenguage  @relation(fields: [idLenguage], references: [id])
+  account    account[]
+  budget     budget[]
+  goal       goal[]
+}
+
+model sex {
+  id             Int              @id @default(autoincrement())
+  name           String           @db.NVarChar(50)
+  user           userPF[]
+  sexTranslation sexTranslation[]
+}
+
+model lenguage {
+  id                      Int                       @id @default(autoincrement())
+  code                    String                    @db.NVarChar(5)
+  name                    String                    @db.NVarChar(50)
+  userPF                  userPF[]
+  sexTranslation          sexTranslation[]
+  accountTypeTranslation  accountTypeTranslation[]
+  categoryTranslation     categoryTranslation[]
+  categoryTypeTranslation categoryTypeTranslation[]
+}
+
+model account {
+  id            Int             @id @default(autoincrement())
+  idUser        Int
+  name          String          @db.NVarChar(50)
+  idBank        Int
+  idAccountType Int
+  balance       Decimal         @db.Decimal(10, 4)
+  createdAt     DateTime        @default(now())
+  user          userPF          @relation(fields: [idUser], references: [id])
+  bank          bank            @relation(fields: [idBank], references: [id])
+  accountType   accountType     @relation(fields: [idAccountType], references: [id])
+  transactionPF transactionPF[]
+}
+
+model bank {
+  id      Int       @id @default(autoincrement())
+  name    String    @db.NVarChar(50)
+  account account[]
+}
+
+model accountType {
+  id                     Int                      @id @default(autoincrement())
+  name                   String                   @db.NVarChar(50)
+  account                account[]
+  accountTypeTranslation accountTypeTranslation[]
+}
+
+model transactionPF {
+  id              Int      @id @default(autoincrement())
+  idCategory      Int
+  idAccount       Int
+  amount          Decimal  @db.Decimal(10, 4)
+  transactionDate DateTime
+  description     String
+  createdAt       DateTime @default(now())
+  category        category @relation(fields: [idCategory], references: [id])
+  account         account  @relation(fields: [idAccount], references: [id])
+}
+
+model category {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.NVarChar(100)
+  idCategoryType      Int
+  categoryType        categoryType          @relation(fields: [idCategoryType], references: [id])
+  transactionPF       transactionPF[]
+  budget              budget[]
+  categoryTranslation categoryTranslation[]
+}
+
+model categoryType {
+  id                      Int                       @id @default(autoincrement())
+  name                    String                    @db.NVarChar(100)
+  category                category[]
+  categoryTypeTranslation categoryTypeTranslation[]
+}
+
+model budget {
+  id         Int      @id @default(autoincrement())
+  idUser     Int
+  idCategory Int
+  amount     Decimal  @db.Decimal(10, 4)
+  startDate  DateTime @db.DateTime
+  endDate    DateTime @db.DateTime
+  createdAt  DateTime @default(now())
+  user       userPF   @relation(fields: [idUser], references: [id])
+  category   category @relation(fields: [idCategory], references: [id])
+}
+
+model goal {
+  id            Int      @id @default(autoincrement())
+  idUser        Int
+  name          String   @db.NVarChar(100)
+  targetAmount  Decimal  @db.Decimal(10, 4)
+  currentAmount Decimal  @db.Decimal(10, 4)
+  targetDate    DateTime @db.DateTime
+  createdAt     DateTime @default(now())
+  user          userPF   @relation(fields: [idUser], references: [id])
+}
+
+model sexTranslation {
+  id         Int      @id @default(autoincrement())
+  idSex      Int
+  idLenguage Int
+  name       String   @db.NVarChar(50)
+  sex        sex      @relation(fields: [idSex], references: [id])
+  lenguage   lenguage @relation(fields: [idLenguage], references: [id])
+
+  @@unique([idSex, idLenguage, name])
+}
+
+model accountTypeTranslation {
+  id            Int         @id @default(autoincrement())
+  idAccountType Int
+  idLenguage    Int
+  name          String      @db.NVarChar(50)
+  accountType   accountType @relation(fields: [idAccountType], references: [id])
+  lenguage      lenguage    @relation(fields: [idLenguage], references: [id])
+
+  @@unique([idAccountType, idLenguage, name])
+}
+
+model categoryTranslation {
+  id         Int      @id @default(autoincrement())
+  idCategory Int
+  idLenguage Int
+  name       String   @db.NVarChar(50)
+  category   category @relation(fields: [idCategory], references: [id])
+  lenguage   lenguage @relation(fields: [idLenguage], references: [id])
+
+  @@unique([idCategory, idLenguage, name])
+}
+
+model categoryTypeTranslation {
+  id             Int          @id @default(autoincrement())
+  idCategoryType Int
+  idLenguage     Int
+  name           String       @db.NVarChar(50)
+  categoryType   categoryType @relation(fields: [idCategoryType], references: [id])
+  lenguage       lenguage     @relation(fields: [idLenguage], references: [id])
+
+  @@unique([idCategoryType, idLenguage, name])
+}

@@ -1,4 +1,5 @@
-import { conenvI } from '@shared/types/env/env.type'
+
+import { Iconenv } from '@shared/types/env/env.type'
 import { config } from 'dotenv'
 
 const NODE_ENV: string | undefined = process.env.NODE_ENV
@@ -11,7 +12,9 @@ config({
   path: `.env.${NODE_ENV}.local`
 })
 
-export const conenv: conenvI = {
+export const conenv: Iconenv = {
   PORT: parseInt(process.env.PORT ?? '3000'),
-  BCRYPT_SALT_ROUNDS: parseInt(process.env.BCRYPT_SALT_ROUNDS ?? '12')
+  BCRYPT_SALT_ROUNDS: parseInt(process.env.BCRYPT_SALT_ROUNDS ?? ''),
+  ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET ?? '',
+  REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET ?? ''
 } as const

@@ -1,5 +1,5 @@
 import { signInDTO } from '@application/dtos/auth/signIn.dto'
-import { signInSummaryToken } from '@application/dtos/auth/signInSummary.dto'
+import { tokenSummary } from '@application/dtos/auth/tokenSummary.dto'
 import { UserPFPrismaRepository } from '@infrastructure/repositories/prisma/userPF/userPFPrismaRepository'
 import { BcryptService } from '@infrastructure/services/auth/bcrypt.service'
 import { TokenService } from '@infrastructure/services/jwt/token.service'
@@ -14,7 +14,7 @@ export class SignInUseCase {
     private readonly tokenService: TokenService
   ) {}
 
-  public async execute (signInDTO: signInDTO): Promise<signInSummaryToken> {
+  public async execute (signInDTO: signInDTO): Promise<tokenSummary> {
     const user: userPF | null = await this.UserPFRepository.findByEmail(signInDTO.email)
     if (user === null) throw new HttpError(clientErrorStatusCodes.UNAUTHORIZED, 'user not found')
 
@@ -24,10 +24,7 @@ export class SignInUseCase {
     const accessToken: string = this.tokenService.generateAccessToken({ id: user.id, name: user.name })
     const refreshToken: string = this.tokenService.generateRefreshToken({ id: user.id, name: user.name })
 
-    const tokens: signInSummaryToken = { accessToken, refreshToken }
-
-    const x = this.tokenService.verifyAccessToken(accessToken)
-    console.log(x)
+    const tokens: tokenSummary = { accessToken, refreshToken }
 
     return tokens
   }

@@ -1,4 +1,4 @@
-import { signInSummary } from '@application/dtos/auth/signInSummary.dto'
+import { signInSummary } from '@application/dtos/auth/signIn.dto'
 import { conenv } from '@shared/config/config'
 import jwt from 'jsonwebtoken'
 export class TokenService {
@@ -30,6 +30,17 @@ export class TokenService {
       const { id, name } = payload as { id: number, name: string }
       const dataUser: signInSummary = { id, name }
       return dataUser
+    } catch (error) {
+      return null
+    }
+  }
+
+  public renewAccessToken (token: string): string | null {
+    try {
+      const userPayload: signInSummary | null = this.verifyRefreshToken(token)
+      if (userPayload === null) throw new Error('token generation failed by renew')
+
+      return this.generateAccessToken(userPayload)
     } catch (error) {
       return null
     }

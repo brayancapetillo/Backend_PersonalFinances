@@ -1,5 +1,5 @@
 /**
- * Integration test suite for the 'sign up' endpoint in the auth route.
+ * Integration test suite for the 'sign up' and 'sign In' endpoint in the auth route.
  *
  * This suite tests the '/auth/signUp' endpoint, covering various scenarios:
  * - Successful user sign up
@@ -7,9 +7,14 @@
  * - Validation errors thrown by Zod
  * - Generic error handling
  *
+ * This suite tests the '/auth/signIn' endpoint, covering various scenarios:
+ * - Successful user sign In
+ * - Handling of HTTP-specific errors
+ * - Validation errors thrown by Zod
+ * - Generic error handling
  * Test cases include both positive and negative results to ensure robust coverage.
  *
- * @module AuthSignUpTest
+ * @module AuthTest
  */
 
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -24,8 +29,10 @@ import chalk from 'chalk'
 import Sinon from 'sinon'
 
 // -DTO's import
-import { signUpDTO } from '@application/dtos/auth/signUp.dto'
+import { tokenSummary } from '@application/dtos/auth/tokenSummary.dto'
 import { userSummaryDTO } from '@application/dtos/userPF/userSummary'
+import { signUpDTO } from '@application/dtos/auth/signUp.dto'
+import { signInDTO } from '@application/dtos/auth/signIn.dto'
 
 // -Constant's import for status codes
 import { clientErrorStatusCodes } from '@shared/constants/http/clientErroStatusCode'
@@ -37,23 +44,26 @@ import { UserPFPrismaRepository } from '@infrastructure/repositories/prisma/user
 
 // -Mock's import
 import { signUpMock } from 'test/mocks/auth/signUpMock'
+import { signInMock } from 'test/mocks/auth/signInMock'
 
 // -Prisma import
 import prisma from '@infrastructure/database/prisma/prismaClient'
 
 chai.use(chaiHttp)
 
-describe(chalk.hex('#c6a363').bold('userPF endpoints tests 🛤️'), () => {
+describe(chalk.hex('#c6a363').bold('Auth endpoints tests 🛤️'), () => {
   let idUser: number = 0
   describe('POST /auth/signUp', (): void => {
     let sandbox: Sinon.SinonSandbox
-    const requestBody: signUpDTO = signUpMock
+    let requestBody: signUpDTO = signUpMock
 
     /**
      * Setup the Sinon sandbox before each test.
      */
     beforeEach(() => {
       sandbox = Sinon.createSandbox()
+
+      requestBody = { ...signUpMock }
     })
 
     /**
@@ -184,6 +194,144 @@ describe(chalk.hex('#c6a363').bold('userPF endpoints tests 🛤️'), () => {
       sandbox.stub(UserPFPrismaRepository.prototype, 'create').rejects(new Error('internal server error test'))
       // Make the HTTP request to the signUp endpoint
       const response = await chai.request(app).post('/_api/v/auth/signUp').send(requestBody)
+
+      // Verify response headers
+      expect(response.headers['content-type']).to.include('application/json')
+      expect(response.status).to.equal(serverErrorStatusCodes.INTERNAL_SERVER_ERROR)
+
+      // Verify response body
+      const { body } = response
+      expect(body).to.have.property('success', false)
+      expect(body).to.have.property('error')
+      expect(body).to.have.property('message')
+    })
+  })
+
+  describe('POST /auth/signIn', (): void => {
+    let sandbox: Sinon.SinonSandbox
+    let requestBody: signInDTO = signInMock
+
+    /**
+     * Setup the Sinon sandbox before each test.
+     */
+    beforeEach((): void => {
+      sandbox = Sinon.createSandbox()
+
+      requestBody = { ...signInMock }
+    })
+
+    /**
+     * Restore the original state of mocks after each test.
+     */
+    afterEach((): void => {
+      sandbox.restore()
+    })
+
+    /**
+     * Test successful user sign in.
+     *
+     * It verifies that a user successful sign in and return correct response.
+     *
+     * @return {Promise<void>}
+     */
+    it('should successful sign in a user', async (): Promise<void> => {
+      // Make the HTTP request to the signIn endpoint
+      const response = await chai.request(app).post('/_api/v/auth/signIn').send(requestBody)
+
+      // Verify response headers
+      expect(response.headers['content-type']).to.include('application/json')
+      expect(response.status).to.equal(successStatusCodes.OK)
+
+      // Verify response body
+      const { body } = response
+      expect(body).to.have.property('success', true)
+      expect(body).to.have.property('data')
+      expect(body).to.have.property('message', 'SUCCESSFUL SIGNIN')
+
+      const data: tokenSummary = body.data
+
+      // Validate returned data properties
+      expect(data).to.have.property('accessToken')
+      expect(data).to.have.property('refreshToken')
+    })
+
+    /**
+     * Test error handling when the user is not found.
+     *
+     * @return {Promise<void>}
+     */
+    it('should return an error if the user is not found', async (): Promise<void> => {
+      // Make the HTTP request to the signIn endpoint
+      requestBody.email = 'notfound@example.com'
+      const response = await chai.request(app).post('/_api/v/auth/signIn').send(requestBody)
+
+      // Verify response headers
+      expect(response.headers['content-type']).to.include('application/json')
+      expect(response.status).to.equal(clientErrorStatusCodes.UNAUTHORIZED)
+
+      // Verify response body
+      const { body } = response
+      expect(body).to.have.property('success', false)
+      expect(body).to.have.property('error')
+      expect(body).to.have.property('message', 'user not found')
+    })
+
+    /**
+     * Test error handling when the user enters an incorrect password.
+     *
+     * @return {Promise<void>}
+     */
+    it('should return an error if the user enters an incorrect password', async (): Promise<void> => {
+      // Make the HTTP request to the signIn endpoint
+      requestBody.password = 'passwordInvalid'
+      const response = await chai.request(app).post('/_api/v/auth/signIn').send(requestBody)
+
+      // Verify response headers
+      expect(response.headers['content-type']).to.include('application/json')
+      expect(response.status).to.equal(clientErrorStatusCodes.FORBIDDEN)
+
+      // Verify response body
+      const { body } = response
+      expect(body).to.have.property('success', false)
+      expect(body).to.have.property('error')
+      expect(body).to.have.property('message', 'incorrect password')
+    })
+
+    /**
+     * Test error handling for invalid request body.
+     *
+     * @returns {Promise<void>}s
+     */
+    it('should return an error if request body is invalid', async (): Promise<void> => {
+      // Make the HTTP request to the signIn endpoint
+      const response = await chai.request(app).post('/_api/v/auth/signIn').send({})
+
+      // Verify response headers
+      expect(response.headers['content-type']).to.include('application/json')
+      expect(response.status).to.equal(clientErrorStatusCodes.BAD_REQUEST)
+
+      // Verify response body
+      const { body } = response
+      expect(body).to.have.property('success', false)
+      expect(body).to.have.property('error')
+      expect(body.error.issues).to.be.an('array')
+
+      body.error.issues.forEach((error: ZodIssue) => {
+        expect(error).to.have.property('code')
+        expect(error).to.have.property('expected')
+        expect(error).to.have.property('received')
+        expect(error).to.have.property('path')
+        expect(error).to.have.property('message')
+      })
+    })
+
+    /**
+     *
+     */
+    it('should return an error if an internal server error occurs', async (): Promise<void> => {
+      sandbox.stub(UserPFPrismaRepository.prototype, 'findByEmail').rejects(new Error('internal server error test'))
+      // Make the HTTP request to the signIn endpoint
+      const response = await chai.request(app).post('/_api/v/auth/signIn').send(requestBody)
 
       // Verify response headers
       expect(response.headers['content-type']).to.include('application/json')

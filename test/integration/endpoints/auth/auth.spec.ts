@@ -29,7 +29,7 @@ import chalk from 'chalk'
 import Sinon from 'sinon'
 
 // -DTO's import
-import { tokenSummary } from '@application/dtos/auth/tokenSummary.dto'
+import { refreshTokenDTO, tokenSummary } from '@application/dtos/auth/refreshToken.dto'
 import { userSummaryDTO } from '@application/dtos/userPF/userSummary'
 import { signUpDTO } from '@application/dtos/auth/signUp.dto'
 import { signInDTO } from '@application/dtos/auth/signIn.dto'
@@ -42,7 +42,11 @@ import { successStatusCodes } from '@shared/constants/http/successStatusCode'
 // -Repository's import
 import { UserPFPrismaRepository } from '@infrastructure/repositories/prisma/userPF/userPFPrismaRepository'
 
+// -Services imports
+import { TokenService } from '@infrastructure/services/jwt/token.service'
+
 // -Mock's import
+import { userSummaryMock } from 'test/mocks/userPF/userSummaryMock'
 import { signUpMock } from 'test/mocks/auth/signUpMock'
 import { signInMock } from 'test/mocks/auth/signInMock'
 
@@ -53,8 +57,9 @@ chai.use(chaiHttp)
 
 describe(chalk.hex('#c6a363').bold('Auth endpoints tests 🛤️'), () => {
   let idUser: number = 0
+  let sandbox: Sinon.SinonSandbox
+
   describe('POST /auth/signUp', (): void => {
-    let sandbox: Sinon.SinonSandbox
     let requestBody: signUpDTO = signUpMock
 
     /**
@@ -208,7 +213,6 @@ describe(chalk.hex('#c6a363').bold('Auth endpoints tests 🛤️'), () => {
   })
 
   describe('POST /auth/signIn', (): void => {
-    let sandbox: Sinon.SinonSandbox
     let requestBody: signInDTO = signInMock
 
     /**
@@ -326,12 +330,148 @@ describe(chalk.hex('#c6a363').bold('Auth endpoints tests 🛤️'), () => {
     })
 
     /**
+     * Test error handling for internal server errors.
      *
+     * @returns {Promise<void>}
      */
     it('should return an error if an internal server error occurs', async (): Promise<void> => {
       sandbox.stub(UserPFPrismaRepository.prototype, 'findByEmail').rejects(new Error('internal server error test'))
       // Make the HTTP request to the signIn endpoint
       const response = await chai.request(app).post('/_api/v/auth/signIn').send(requestBody)
+
+      // Verify response headers
+      expect(response.headers['content-type']).to.include('application/json')
+      expect(response.status).to.equal(serverErrorStatusCodes.INTERNAL_SERVER_ERROR)
+
+      // Verify response body
+      const { body } = response
+      expect(body).to.have.property('success', false)
+      expect(body).to.have.property('error')
+      expect(body).to.have.property('message')
+    })
+  })
+
+  describe('POST /auth/refreshToken', (): void => {
+    let tokenService: TokenService
+    let requestBody: refreshTokenDTO = { refreshToken: '' }
+
+    /**
+     * Mock DTO for user summary.
+     *
+     * @type {userSummaryDTO}
+     */
+    const userSummary: userSummaryDTO = userSummaryMock
+
+    /**
+     * Setup before all test case.
+     */
+    before((): void => {
+      // Create TokenService
+      tokenService = new TokenService()
+    })
+
+    /**
+     * Setup the Sinon sandbox before each test.
+     */
+    beforeEach((): void => {
+      sandbox = Sinon.createSandbox()
+      requestBody.refreshToken = tokenService.generateRefreshToken({ id: userSummary.id, name: userSummary.name })
+      requestBody = { ...requestBody }
+    })
+
+    /**
+     * Restore the original state of mocks after each test.
+     */
+    afterEach((): void => {
+      sandbox.restore()
+    })
+
+    /**
+     * Test successful refresh token.
+     *
+     * It verifies that a refresh token is valid and return refresh tokens.
+     *
+     * @return {Promise<void>}
+     */
+    it('should successful refresh tokens', async (): Promise<void> => {
+      // Make the HTTP request to the refreshToken endpoint
+      const response = await chai.request(app).post('/_api/v/auth/refreshToken').send(requestBody)
+
+      // Verify response headers
+      expect(response.headers['content-type']).to.include('application/json')
+      expect(response.status).to.equal(successStatusCodes.OK)
+
+      // Verify response body
+      const { body } = response
+      expect(body).to.have.property('success', true)
+      expect(body).to.have.property('data')
+      expect(body).to.have.property('message', 'TOKEN SUCCESSFULLY REFRESH')
+
+      const data: tokenSummary = body.data
+
+      // Validate returned data properties
+      expect(data).to.have.property('accessToken')
+      expect(data).to.have.property('refreshToken')
+    })
+
+    /**
+     * Test error handling when the refresh token is invalid.
+     *
+     * @return {Promise<void>}
+     */
+    it('should return an error if the refresh token is invalid', async (): Promise<void> => {
+      // Make the HTTP request to the refreshToken endpoint
+      requestBody.refreshToken = 'invalidToken'
+      const response = await chai.request(app).post('/_api/v/auth/refreshToken').send(requestBody)
+
+      // Verify response headers
+      expect(response.headers['content-type']).to.include('application/json')
+      expect(response.status).to.equal(clientErrorStatusCodes.UNAUTHORIZED)
+
+      // Verify response body
+      const { body } = response
+      expect(body).to.have.property('success', false)
+      expect(body).to.have.property('error')
+      expect(body).to.have.property('message', 'invalid refresh token')
+    })
+
+    /**
+     * Test error handling for invalid request body.
+     *
+     * @returns {Promise<void>}s
+     */
+    it('should return an error if request body is invalid', async (): Promise<void> => {
+      // Make the HTTP request to the refreshToken endpoint
+      const response = await chai.request(app).post('/_api/v/auth/refreshToken').send({})
+
+      // Verify response headers
+      expect(response.headers['content-type']).to.include('application/json')
+      expect(response.status).to.equal(clientErrorStatusCodes.BAD_REQUEST)
+
+      // Verify response body
+      const { body } = response
+      expect(body).to.have.property('success', false)
+      expect(body).to.have.property('error')
+      expect(body.error.issues).to.be.an('array')
+
+      body.error.issues.forEach((error: ZodIssue) => {
+        expect(error).to.have.property('code')
+        expect(error).to.have.property('expected')
+        expect(error).to.have.property('received')
+        expect(error).to.have.property('path')
+        expect(error).to.have.property('message')
+      })
+    })
+
+    /**
+     * Test error handling for internal server errors.
+     *
+     * @returns {Promise<void>}
+     */
+    it('should return an error if an internal server error occurs', async (): Promise<void> => {
+      sandbox.stub(TokenService.prototype, 'generateAccessToken').throws(new Error('internal server error test'))
+      // Make the HTTP request to the refreshToken endpoint
+      const response = await chai.request(app).post('/_api/v/auth/refreshToken').send(requestBody)
 
       // Verify response headers
       expect(response.headers['content-type']).to.include('application/json')

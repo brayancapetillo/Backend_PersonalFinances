@@ -19,7 +19,7 @@ model userPF {
   name       String    @db.NVarChar(255)
   lastName   String?   @db.NVarChar(255)
   birthday   DateTime?
-  phone      String?   @unique @db.NVarChar(12)
+  phone      String?   @db.NVarChar(12)
   idSex      Int
   idLenguage Int
   password   String

@@ -1,5 +1,5 @@
+import { tokenSummary } from '@application/dtos/auth/refreshToken.dto'
 import { signInDTO } from '@application/dtos/auth/signIn.dto'
-import { tokenSummary } from '@application/dtos/auth/tokenSummary.dto'
 import { UserPFPrismaRepository } from '@infrastructure/repositories/prisma/userPF/userPFPrismaRepository'
 import { BcryptService } from '@infrastructure/services/auth/bcrypt.service'
 import { TokenService } from '@infrastructure/services/jwt/token.service'

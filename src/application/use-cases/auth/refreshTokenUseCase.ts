@@ -1,5 +1,5 @@
+import { refreshTokenDTO, tokenSummary } from '@application/dtos/auth/refreshToken.dto'
 import { signInSummary } from '@application/dtos/auth/signIn.dto'
-import { tokenSummary } from '@application/dtos/auth/tokenSummary.dto'
 import { TokenService } from '@infrastructure/services/jwt/token.service'
 import { clientErrorStatusCodes } from '@shared/constants/http/clientErroStatusCode'
 import { HttpError } from '@shared/utils/error/httpError'
@@ -7,8 +7,8 @@ import { HttpError } from '@shared/utils/error/httpError'
 export class RefreshTokenUseCase {
   constructor (private readonly tokenService: TokenService) {}
 
-  public execute (refreshToken: string): tokenSummary {
-    const decodedRefreshToken: signInSummary | null = this.tokenService.verifyRefreshToken(refreshToken)
+  public execute (dataRefreshToken: refreshTokenDTO): tokenSummary {
+    const decodedRefreshToken: signInSummary | null = this.tokenService.verifyRefreshToken(dataRefreshToken.refreshToken)
 
     if (decodedRefreshToken === null) throw new HttpError(clientErrorStatusCodes.UNAUTHORIZED, 'invalid refresh token')
 

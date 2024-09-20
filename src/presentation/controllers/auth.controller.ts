@@ -1,6 +1,6 @@
+import { refreshTokenDTO, tokenSummary } from '@application/dtos/auth/refreshToken.dto'
 import { signInDTO } from '@application/dtos/auth/signIn.dto'
 import { signUpDTO } from '@application/dtos/auth/signUp.dto'
-import { tokenSummary } from '@application/dtos/auth/tokenSummary.dto'
 import { userSummaryDTO } from '@application/dtos/userPF/userSummary'
 import { RefreshTokenUseCase } from '@application/use-cases/auth/refreshTokenUseCase'
 import { SignInUseCase } from '@application/use-cases/auth/signInUseCase'
@@ -43,11 +43,11 @@ export class AuthController {
 
   public async refreshToken (req: Request, res: Response): Promise<void> {
     try {
-      const refreshToken: string = req.body
+      const refreshToken: refreshTokenDTO = req.body
 
       const resRefreshToken: tokenSummary = this.refreshTokenUseCase.execute(refreshToken)
 
-      successResponseHttp<tokenSummary>(res, { statusCode: successStatusCodes.OK, data: resRefreshToken, message: 'token succesfully refresh' })
+      successResponseHttp<tokenSummary>(res, { statusCode: successStatusCodes.OK, data: resRefreshToken, message: 'token successfully refresh' })
     } catch (error: any) {
       void errorResponseHttp(res, error)
     }

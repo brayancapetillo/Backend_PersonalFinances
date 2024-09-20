@@ -8,10 +8,14 @@ import chalk from 'chalk'
 import { UserPFRepository } from '@domain/interfaces/UserPFRepository'
 import { UserPF } from '@domain/entities/userPF.entity'
 
-// -Prisma mock imports
+// -Repository's import
+import { UserPFPrismaRepository } from '@infrastructure/repositories/prisma/userPF/userPFPrismaRepository'
+
+// -Mock's import
 import { createPrismaMock } from 'test/mocks/prisma/prismaMock'
 import { userPFMock } from 'test/mocks/userPF/userPFMock'
-import { UserPFPrismaRepository } from '@infrastructure/repositories/prisma/userPF/userPFPrismaRepository'
+
+// -Prisma's import
 import { PrismaClient } from '@prisma/client'
 
 /**

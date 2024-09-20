@@ -1,11 +1,21 @@
 /**
  * Unit test for the AuthController's sign up method.
  *
- * This files contains a suite for test that verify the behavior of the 'signUp'
- * method in the 'AuthController' class. It tests differents scenarios, including:
+ * This files contains a suite for test that verify the behavior of the 'signUp', 'signIn' and 'refreshToken'
+ * methods in the 'AuthController' class. It tests differents scenarios, including:
+ * *SignUp
  * -Successful sign up response.
  * -Handling of HttpErrors.
- * -Validation errors thrown by Zod.
+ * -Generic errors handling.
+ *
+ * *SignIn
+ * -Successful sign in response.
+ * -Handling of HttpErrors.
+ * -Generic errors handling.
+ *
+ * *refreshToken
+ * -Successful refresh token response.
+ * -Handling of HttpErrors.
  * -Generic errors handling.
  *
  * The tests uses sinon for the stubbing methods, and Chai's expect for assertions.
@@ -20,14 +30,21 @@ import chalk from 'chalk'
 import Sinon from 'sinon'
 
 // -DTO's import
+import { refreshTokenDTO, tokenSummary } from '@application/dtos/auth/refreshToken.dto'
 import { userSummaryDTO } from '@application/dtos/userPF/userSummary'
 import { signUpDTO } from '@application/dtos/auth/signUp.dto'
+import { signInDTO, signInSummary } from '@application/dtos/auth/signIn.dto'
 
 // -Use Case's import
+import { RefreshTokenUseCase } from '@application/use-cases/auth/refreshTokenUseCase'
 import { SignUpUseCase } from '@application/use-cases/auth/signUpCaseUse'
+import { SignInUseCase } from '@application/use-cases/auth/signInUseCase'
 
 // -Controller's import
 import { AuthController } from '@presentation/controllers/auth.controller'
+
+// -Service's import
+import { TokenService } from '@infrastructure/services/jwt/token.service'
 
 // -Utility's import for HTTP responses and error handling
 import * as successResponseHttp from '@shared/utils/successResponseHttp'
@@ -39,18 +56,17 @@ import { clientErrorStatusCodes } from '@shared/constants/http/clientErroStatusC
 import { successStatusCodes } from '@shared/constants/http/successStatusCode'
 
 // -Mock's import
+import { tokenSummaryMock } from 'test/mocks/auth/tokenSummaryMock'
 import { userSummaryMock } from 'test/mocks/userPF/userSummaryMock'
 import { signUpMock } from 'test/mocks/auth/signUpMock'
-import { SignInUseCase } from '@application/use-cases/auth/signInUseCase'
 import { signInMock } from 'test/mocks/auth/signInMock'
-import { signInDTO } from '@application/dtos/auth/signIn.dto'
-import { tokenSummary } from '@application/dtos/auth/tokenSummary.dto'
-import { tokenSummaryMock } from 'test/mocks/auth/tokenSummaryMock'
 
 describe(chalk.hex('#c6a363').bold('Auth controller tests 🧑‍⚖️'), (): void => {
   let authController: AuthController
+  let tokenServiceStub: Sinon.SinonStubbedInstance<TokenService>
   let signUpUseCaseStub: Sinon.SinonStubbedInstance<SignUpUseCase>
   let signInUseCaseStub: Sinon.SinonStubbedInstance<SignInUseCase>
+  let refreshTokenUseCaseStub: Sinon.SinonStubbedInstance<RefreshTokenUseCase>
   let req: Partial<Request>
   let res: Partial<Response>
   let successResponseStub: Sinon.SinonStub
@@ -60,18 +76,24 @@ describe(chalk.hex('#c6a363').bold('Auth controller tests 🧑‍⚖️'), (): v
    * Setup before each test case.
    */
   beforeEach((): void => {
+    // Create TokenService
+    tokenServiceStub = Sinon.createStubInstance(TokenService)
+
     // Create stub for the signUpUseCase
     signUpUseCaseStub = Sinon.createStubInstance(SignUpUseCase)
 
     // Create stub for the signInUseCase
     signInUseCaseStub = Sinon.createStubInstance(SignInUseCase)
 
+    // Create stub for the refreshTokenUseCase
+    refreshTokenUseCaseStub = Sinon.createStubInstance(RefreshTokenUseCase)
+
     // Create stub for success and error response handdles
     successResponseStub = Sinon.stub(successResponseHttp, 'successResponseHttp')
     errorResponseStub = Sinon.stub(errorResponseHttp, 'errorResponseHttp')
 
     // Create AuthController
-    authController = new AuthController(signUpUseCaseStub, signInUseCaseStub)
+    authController = new AuthController(signUpUseCaseStub, signInUseCaseStub, refreshTokenUseCaseStub)
 
     // Mock to response
     res = {
@@ -103,6 +125,9 @@ describe(chalk.hex('#c6a363').bold('Auth controller tests 🧑‍⚖️'), (): v
      */
     const userSummary: userSummaryDTO = userSummaryMock
 
+    /**
+     * Setup before each test case.
+     */
     beforeEach((): void => {
       // Mock to request
       req = {
@@ -194,7 +219,7 @@ describe(chalk.hex('#c6a363').bold('Auth controller tests 🧑‍⚖️'), (): v
 
     /**
      * Tests the scenario where the user sign in is successful.
-     * Verifies that the correct status and returns access and refresh token.
+     * Verifies that the correct status and returns access and refresh tokens.
      *
      * @returns {Promise<void>}
      */
@@ -246,6 +271,98 @@ describe(chalk.hex('#c6a363').bold('Auth controller tests 🧑‍⚖️'), (): v
       await authController.signIn(req as Request, res as Response)
 
       expect(signInUseCaseStub.execute.calledOnceWith(req.body)).to.be.true
+      expect(successResponseStub.notCalled).to.be.true
+      expect(errorResponseStub.calledOnce).to.be.true
+      expect(errorResponseStub.calledOnceWith(Sinon.match(res), error)).to.be.true
+    })
+  })
+
+  describe('refreshToken', (): void => {
+    /**
+     * Mock DTO for access and refresh tokens
+     *
+     * @type {tokenSummary}
+     */
+    const refreshTokensMock: tokenSummary = tokenSummaryMock
+
+    /**
+     * Mock DTO for refresh token
+     *
+     * @type {refreshTokenDTO}
+     */
+    const refreshTokenDTO: refreshTokenDTO = refreshTokensMock
+
+    /**
+     * Mock DTO for user summary.
+     *
+     * @type {signInSummary}
+     */
+    const signInSummary: signInSummary = { id: userSummaryMock.id, name: userSummaryMock.name }
+
+    /**
+     * Setup before each test case
+     */
+    beforeEach((): void => {
+      req = {
+        body: refreshTokenDTO
+      }
+    })
+
+    /**
+     * Tests the scenario where the tokens refreshs sucessfull.
+     * Verifies correct status and returns refreshed tokens.
+     *
+     * @returns {Promise<void>}
+     */
+    it('should respond with status 200 and return refresh tokens', async (): Promise<void> => {
+      refreshTokenUseCaseStub.execute.returns(refreshTokensMock)
+      tokenServiceStub.verifyRefreshToken.returns(signInSummary)
+
+      await authController.refreshToken(req as Request, res as Response)
+
+      expect(refreshTokenUseCaseStub.execute.calledOnceWith(req.body)).to.be.true
+      expect(successResponseStub.calledOnce).to.be.true
+      expect(successResponseStub.calledOnceWith(Sinon.match(res),
+        {
+          statusCode: successStatusCodes.OK,
+          data: refreshTokensMock,
+          message: 'token successfully refresh'
+        }
+      )).to.be.true
+    })
+
+    /**
+     * Tests handling of business logic errors such as refresh token invalid.
+     * Ensures that the correct error response is sent and the error is an instance of HttpError.
+     *
+     * @returns {Promise<void>}
+     */
+    it('should handle HttpError', async (): Promise<void> => {
+      const error = new HttpError(clientErrorStatusCodes.UNAUTHORIZED, 'invalid refresh token')
+      refreshTokenUseCaseStub.execute.throws(error)
+
+      await authController.refreshToken(req as Request, res as Response)
+
+      expect(refreshTokenUseCaseStub.execute.calledOnceWith(req.body)).to.be.true
+      expect(successResponseStub.notCalled).to.be.true
+      expect(errorResponseStub.calledOnce).to.be.true
+      expect(errorResponseStub.calledOnceWith(Sinon.match(res), error)).to.be.true
+    })
+
+    /**
+     * Test handling of generic error. Verifies that the error is handled
+     * and appropriate response is sent to the client.
+     *
+     * @returns {Promise<void>}
+     */
+    it('should handle generic Error and respond with error message', async (): Promise<void> => {
+      const error = new Error('internal server error for refresh token')
+
+      refreshTokenUseCaseStub.execute.throws(error)
+
+      await authController.refreshToken(req as Request, res as Response)
+
+      expect(refreshTokenUseCaseStub.execute.calledOnceWith(req.body)).to.be.true
       expect(successResponseStub.notCalled).to.be.true
       expect(errorResponseStub.calledOnce).to.be.true
       expect(errorResponseStub.calledOnceWith(Sinon.match(res), error)).to.be.true

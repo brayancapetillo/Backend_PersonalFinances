@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import Sinon from 'sinon'
 
 // -DTO imports
-import { tokenSummary } from '@application/dtos/auth/tokenSummary.dto'
+import { tokenSummary } from '@application/dtos/auth/refreshToken.dto'
 import { signInDTO } from '@application/dtos/auth/signIn.dto'
 
 // -Use Case and domain entity imports

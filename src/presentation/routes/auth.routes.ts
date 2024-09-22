@@ -29,8 +29,6 @@ import { AuthController } from '@presentation/controllers/auth.controller'
 import { refreshTokenSchema } from '@presentation/middlewares/validators/schemas/auth/refreshTokenValidation'
 import { signInSchema } from '@presentation/middlewares/validators/schemas/auth/signInValidation'
 import { signUpSchema } from '@presentation/middlewares/validators/schemas/auth/signUpValidation'
-
-// -Validation middleware's import
 import { validateSchema } from '@presentation/middlewares/validators/validationMiddleware'
 
 // Create an instance of the Express router

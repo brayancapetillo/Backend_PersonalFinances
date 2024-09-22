@@ -58,6 +58,7 @@ model account {
   idBank        Int
   idAccountType Int
   balance       Decimal         @db.Decimal(10, 4)
+  accountNumber String          @unique @db.NVarChar(20)
   createdAt     DateTime        @default(now())
   user          userPF          @relation(fields: [idUser], references: [id])
   bank          bank            @relation(fields: [idBank], references: [id])

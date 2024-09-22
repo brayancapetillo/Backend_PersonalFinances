@@ -34,8 +34,6 @@
     "noFallthroughCasesInSwitch": true,
 
     "skipLibCheck": true,
-
-    "typeRoots": ["./node_modules/@types","./src/shared/types/index.d.ts"]
   },
 
   "include": ["src/**/*", "prisma/**/*", "test/**/*"],

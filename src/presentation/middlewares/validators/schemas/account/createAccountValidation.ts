@@ -1,10 +1,10 @@
-import { z } from 'zod'
+import { accountSchema } from './accountValidation'
 
-export const createAccountSchema = z.object({
-  idUser: z.number().int().positive('idSex must be a positive integer'),
-  name: z.string().nonempty('name cannot be empty').min(3, 'name must be at least 3 characters long'),
-  idBank: z.number().int().positive('idSex must be a positive integer'),
-  idAccountType: z.number().int().positive('idSex must be a positive integer'),
-  balance: z.number().positive('balance must be a positive decimal'),
-  accountNumber: z.string().regex(/^\d+$/, { message: 'The card number must contain only digits' }).min(18, 'accountNumber must be at least 18 characters long').max(20, 'accountNumber must be at most 20 characters long')
+export const createAccountSchema = accountSchema.pick({
+  idUser: true,
+  name: true,
+  idBank: true,
+  idAccountType: true,
+  balance: true,
+  accountNumber: true
 })

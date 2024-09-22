@@ -6,11 +6,13 @@
  */
 // -Library and tool imports
 import express, { Express } from 'express'
+import passport from 'passport'
 import morgan from 'morgan'
 import cors from 'cors'
 
 import { conenv } from '@shared/config/config'
 import { router } from '@presentation/routes'
+import { jwtStrategy } from '@shared/config/passport'
 
 const app: Express = express()
 
@@ -22,6 +24,10 @@ app.use(morgan('dev'))
 app.use(cors())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
+app.use(passport.initialize())
+
+// +=== Passport ===+//
+passport.use(jwtStrategy)
 
 app.use(router)
 

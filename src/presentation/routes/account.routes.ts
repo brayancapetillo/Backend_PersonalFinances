@@ -23,8 +23,8 @@ const getAccountUseCase = new GetAccountUseCase(accountPrismaRepository)
 
 const accountController = new AccountController(createAccountUseCase, getAccountUseCase)
 
-router.post('/createAccount', verifyAuth, validateSchema(createAccountSchema), accountController.createAccount.bind(accountController))
+router.post('/', verifyAuth, validateSchema(createAccountSchema), accountController.createAccount.bind(accountController))
 
-router.get('/account/:id', verifyAuth, validateParamsSchema(accountIdSchema), accountController.getAccount.bind(accountController))
+router.get('/:id', verifyAuth, validateParamsSchema(accountIdSchema), accountController.getAccount.bind(accountController))
 
 export { router }

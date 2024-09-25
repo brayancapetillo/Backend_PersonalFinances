@@ -11,5 +11,6 @@ export const accountSchema = z.object({
 })
 
 export const accountParamsSchema = z.object({
-  id: z.string().regex(/^\d+$/, 'id must be a number').refine((val) => parseInt(val, 10) > 0, { message: 'id must be a positive number' })
+  id: z.string().regex(/^\d+$/, 'id must be a number').refine((val) => parseInt(val, 10) > 0, { message: 'id must be a positive number' }),
+  idUser: z.string().regex(/^\d+$/, 'id must be a number').refine((val) => parseInt(val, 10) > 0, { message: 'id must be a positive number' })
 })

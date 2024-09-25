@@ -1,3 +1,4 @@
+import { updateAccountDTO } from '@application/dtos/account/updateAccount.dto'
 import { Account } from '@domain/entities/account.entity'
 import { AccountType } from '@domain/entities/accountType.entity'
 import { Bank } from '@domain/entities/bank,entity'
@@ -45,20 +46,12 @@ export class AccountPrismaRepository implements IAccountRepository {
     return this.toDomain(savedAccount)
   }
 
-  public async update (account: Account): Promise<Account> {
-    const updateAccount: prismaAccount = await this.prisma.account.update(
-      {
-        where: { id: account.id },
-        data:
-        {
-          name: account.name,
-          idBank: account.idBank,
-          idAccountType: account.idAccountType,
-          balance: account.balance,
-          accountNumber: account.accountNumber
-        }
-      }
-    )
+  public async update (id: number, account: updateAccountDTO): Promise<Account> {
+    const updateAccount: prismaAccount = await this.prisma.account.update({
+      where: { id },
+      data: account,
+      include: { bank: true, accountType: true }
+    })
 
     return this.toDomain(updateAccount)
   }
@@ -77,6 +70,7 @@ export class AccountPrismaRepository implements IAccountRepository {
       prismaAccount.balance.toNumber(),
       prismaAccount.accountNumber,
       prismaAccount.createdAt,
+      prismaAccount.updatedAt,
       prismaAccount.bank !== undefined ? new Bank(prismaAccount.bank.id, prismaAccount.bank.name as tBank) : undefined,
       prismaAccount.accountType !== undefined ? new AccountType(prismaAccount.accountType.id, prismaAccount.accountType.name as taccountType) : undefined
     )

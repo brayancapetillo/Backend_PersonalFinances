@@ -29,6 +29,7 @@ export class CreateAccountUseCase {
       createAccountDTO.idAccountType,
       createAccountDTO.balance,
       createAccountDTO.accountNumber,
+      new Date(),
       new Date()
     )
 

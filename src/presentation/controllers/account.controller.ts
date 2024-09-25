@@ -1,6 +1,7 @@
 import { createAccountDTO } from '@application/dtos/account/createAccount.dto'
 import { updateAccountDTO } from '@application/dtos/account/updateAccount.dto'
 import { CreateAccountUseCase } from '@application/use-cases/account/createAccountUseCase'
+import { DeleteAccountUseCase } from '@application/use-cases/account/DeleteAccountUseCase'
 import { GetAccountUseCase } from '@application/use-cases/account/getAccountUseCase'
 import { UpdateAccountUseCase } from '@application/use-cases/account/updateAccountUseCase'
 import { Account } from '@domain/entities/account.entity'
@@ -13,7 +14,8 @@ export class AccountController {
   constructor (
     private readonly createAccountUseCase: CreateAccountUseCase,
     private readonly getAccountUseCase: GetAccountUseCase,
-    private readonly updateAccountUseCase: UpdateAccountUseCase
+    private readonly updateAccountUseCase: UpdateAccountUseCase,
+    private readonly deleteAccountUseCase: DeleteAccountUseCase
   ) {}
 
   public async createAccount (req: Request, res: Response): Promise<void> {
@@ -48,6 +50,17 @@ export class AccountController {
       const resUpdateAccount: Account = await this.updateAccountUseCase.execute(accountId, updateAccountDTO)
 
       successResponseHttp<Account>(res, { statusCode: successStatusCodes.OK, data: resUpdateAccount, message: 'account successfully updated' })
+    } catch (error: any) {
+      void errorResponseHttp(res, error)
+    }
+  }
+
+  public async deleteAccount (req: Request, res: Response): Promise<void> {
+    try {
+      const accountId: number = Number(req.params.id)
+
+      await this.deleteAccountUseCase.execute(accountId)
+      successResponseHttp<number>(res, { statusCode: successStatusCodes.NO_CONTENT, data: accountId, message: 'account successfully deleted' })
     } catch (error: any) {
       void errorResponseHttp(res, error)
     }

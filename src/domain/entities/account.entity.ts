@@ -11,6 +11,7 @@ export class Account {
     public balance: number,
     public accountNumber: string,
     public createdAt: Date,
+    public updatedAt: Date,
     public bank?: Bank,
     public accountType?: AccountType
   ) {}

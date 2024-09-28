@@ -1,25 +1,29 @@
 /**
- * Unit test for the AuthController's sign up method.
+ * Unit tests for the AuthController class.
  *
- * This files contains a suite for test that verify the behavior of the 'signUp', 'signIn' and 'refreshToken'
- * methods in the 'AuthController' class. It tests differents scenarios, including:
- * *SignUp
- * -Successful sign up response.
- * -Handling of HttpErrors.
- * -Generic errors handling.
+ * This file contains a suite of tests that verify the behavior of the 'signUp', 'signIn', and 'refreshToken'
+ * methods in the AuthController class. The tests cover various scenarios, including successful operations,
+ * handling of HttpErrors, and generic error handling.
  *
- * *SignIn
- * -Successful sign in response.
- * -Handling of HttpErrors.
- * -Generic errors handling.
+ * ### Test Scenarios:
  *
- * *refreshToken
- * -Successful refresh token response.
- * -Handling of HttpErrors.
- * -Generic errors handling.
+ * *signUp*
+ * - Verifies successful sign-up response.
+ * - Handles HttpErrors appropriately.
+ * - Verifies generic error handling.
  *
- * The tests uses sinon for the stubbing methods, and Chai's expect for assertions.
- * Test cases ensure that both positive and negative outcomes are covered.
+ * *signIn*
+ * - Verifies successful sign-in response.
+ * - Handles HttpErrors appropriately.
+ * - Verifies generic error handling.
+ *
+ * *refreshToken*
+ * - Verifies successful refresh token response.
+ * - Handles HttpErrors appropriately.
+ * - Verifies generic error handling.
+ *
+ * The tests use Sinon for method stubbing and Chai's `expect` for assertions.
+ * Both positive and negative outcomes are covered to ensure comprehensive testing.
  */
 
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -31,9 +35,9 @@ import Sinon from 'sinon'
 
 // -DTO's import
 import { refreshTokenDTO, tokenSummary } from '@application/dtos/auth/refreshToken.dto'
+import { signInDTO, signInSummary } from '@application/dtos/auth/signIn.dto'
 import { userSummaryDTO } from '@application/dtos/userPF/userSummary'
 import { signUpDTO } from '@application/dtos/auth/signUp.dto'
-import { signInDTO, signInSummary } from '@application/dtos/auth/signIn.dto'
 
 // -Use Case's import
 import { RefreshTokenUseCase } from '@application/use-cases/auth/refreshTokenUseCase'

@@ -1,18 +1,29 @@
 /**
- * Integration test suite for the 'sign up' and 'sign In' endpoint in the auth route.
+ * Integration test suite for the 'sign up', 'sign in', and 'refresh token' endpoints in the auth route.
  *
- * This suite tests the '/auth/signUp' endpoint, covering various scenarios:
- * - Successful user sign up
- * - Handling of HTTP-specific errors
- * - Validation errors thrown by Zod
- * - Generic error handling
+ * ### This suite comprehensively tests the following endpoints and scenarios:
  *
- * This suite tests the '/auth/signIn' endpoint, covering various scenarios:
- * - Successful user sign In
- * - Handling of HTTP-specific errors
- * - Validation errors thrown by Zod
- * - Generic error handling
- * Test cases include both positive and negative results to ensure robust coverage.
+ * + **POST /auth/signUp**:
+ *   - Successfully signs up a new user.
+ *   - Handles HTTP-specific errors (e.g., 400, 500).
+ *   - Manages validation errors thrown by Zod (e.g., invalid input).
+ *   - Tests generic error handling (e.g., database failures, unknown errors).
+ *
+ * + **POST /auth/signIn**:
+ *   - Successfully signs in a user.
+ *   - Handles HTTP-specific errors (e.g., 400, 401).
+ *   - Manages validation errors thrown by Zod (e.g., invalid credentials).
+ *   - Tests generic error handling (e.g., server issues).
+ *
+ * + **POST /auth/refreshToken**:
+ *   - Successfully refreshes the access token.
+ *   - Handles HTTP-specific errors (e.g., 400, 403).
+ *   - Manages validation errors thrown by Zod (e.g., invalid or expired token).
+ *   - Tests generic error handling (e.g., token-related failures).
+ *
+ * ### Test coverage:
+ * Each test ensures that the endpoints respond correctly to both valid and invalid inputs,
+ * focusing on proper error handling and validation.
  *
  * @module AuthTest
  */

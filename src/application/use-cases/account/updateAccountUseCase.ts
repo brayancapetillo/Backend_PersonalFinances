@@ -13,7 +13,7 @@ export class UpdateAccountUseCase {
 
     if (updateAccountDTO.accountNumber !== undefined) {
       const existAccountNumber: Account | null = await this.AccountRepository.findByAccountNumber(updateAccountDTO.accountNumber)
-      if (existAccountNumber !== null && existAccountNumber.id !== accountId) throw new HttpError(clientErrorStatusCodes.CONFLICT, 'Account number is already registered')
+      if (existAccountNumber !== null && existAccountNumber.id !== accountId) throw new HttpError(clientErrorStatusCodes.CONFLICT, 'account number is already registered')
     }
 
     const dataUpdateAccount: updateAccountDTO = {

@@ -24,7 +24,7 @@ export class AccountController {
 
       const resCreateAccount: Account = await this.createAccountUseCase.execute(createAccountDTO)
 
-      successResponseHttp<Account>(res, { statusCode: successStatusCodes.OK, data: resCreateAccount, message: 'account successfully created' })
+      successResponseHttp<Account>(res, { statusCode: successStatusCodes.CREATED, data: resCreateAccount, message: 'account successfully created' })
     } catch (error: any) {
       void errorResponseHttp(res, error)
     }

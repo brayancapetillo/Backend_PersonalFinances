@@ -17,7 +17,7 @@ export class CreateAccountUseCase {
     if (user === null) throw new HttpError(clientErrorStatusCodes.UNPROCESSABLE_ENTITY, 'invalid user Id')
 
     const existAccount: Account | null = await this.AccountRepository.findByAccountNumber(createAccountDTO.accountNumber)
-    if (existAccount !== null) throw new HttpError(clientErrorStatusCodes.CONFLICT, 'Account number is already registered')
+    if (existAccount !== null) throw new HttpError(clientErrorStatusCodes.CONFLICT, 'account number is already registered')
 
     // !Add validation for existe bank, accountType,
 

@@ -14,9 +14,18 @@ export interface UserPFMock {
 
 }
 
+export interface AccountMock {
+  findUnique: SinonStub
+  findFirst: SinonStub
+  create: SinonStub
+  update: SinonStub
+  delete: SinonStub
+}
+
 /**
  * Represents the Prisma mock, containing a mock implementation of the `userPF` model.
  */
 export interface PrismaMock {
   userPF: UserPFMock
+  account: AccountMock
 }

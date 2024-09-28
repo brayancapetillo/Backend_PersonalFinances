@@ -21,6 +21,13 @@ export function createPrismaMock (): PrismaMock {
       findUnique: sinon.stub(prisma.userPF, 'findUnique'),
       findFirst: sinon.stub(prisma.userPF, 'findFirst'),
       create: sinon.stub(prisma.userPF, 'create')
+    },
+    account: {
+      findUnique: sinon.stub(prisma.account, 'findUnique'),
+      findFirst: sinon.stub(prisma.account, 'findFirst'),
+      create: sinon.stub(prisma.account, 'create'),
+      update: sinon.stub(prisma.account, 'update'),
+      delete: sinon.stub(prisma.account, 'delete')
     }
   }
 }

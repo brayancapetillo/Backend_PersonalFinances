@@ -14,5 +14,8 @@ export const dataBank: Array<Pick<Bank, 'name'>> = [
   { name: 'Banco Multiva' },
   { name: 'Afirme' },
   { name: 'Intercam Banco' },
-  { name: 'BanCoppel' }
+  { name: 'BanCoppel' },
+  { name: 'Nu' },
+  { name: 'RappiCard' },
+  { name: 'Efectivo' }
 ]

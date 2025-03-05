@@ -33,7 +33,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
 
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
 
   "include": ["src/**/*", "prisma/**/*", "test/**/*"],

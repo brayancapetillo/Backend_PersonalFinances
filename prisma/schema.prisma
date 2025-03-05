@@ -19,7 +19,7 @@ model userPF {
   name       String    @db.NVarChar(255)
   lastName   String?   @db.NVarChar(255)
   birthday   DateTime?
-  phone      String?   @unique @db.NVarChar(12)
+  phone      String?   @db.NVarChar(12)
   idSex      Int
   idLenguage Int
   password   String
@@ -52,17 +52,23 @@ model lenguage {
 }
 
 model account {
-  id            Int             @id @default(autoincrement())
-  idUser        Int
-  name          String          @db.NVarChar(50)
-  idBank        Int
-  idAccountType Int
-  balance       Decimal         @db.Decimal(10, 4)
-  createdAt     DateTime        @default(now())
-  user          userPF          @relation(fields: [idUser], references: [id])
-  bank          bank            @relation(fields: [idBank], references: [id])
-  accountType   accountType     @relation(fields: [idAccountType], references: [id])
-  transactionPF transactionPF[]
+  id             Int             @id @default(autoincrement())
+  idUser         Int
+  name           String          @db.NVarChar(50)
+  idBank         Int
+  idAccountType  Int
+  balance        Decimal         @db.Decimal(10, 4)
+  accountNumber  String          @unique @db.NVarChar(20)
+  creditUsed     Decimal?        @db.Decimal(10, 4)
+  creditLimit    Decimal?        @db.Decimal(10, 4)
+  cutOffDate     DateTime?       @db.Date
+  paymentDueDate DateTime?       @db.Date
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  user           userPF          @relation(fields: [idUser], references: [id])
+  bank           bank            @relation(fields: [idBank], references: [id])
+  accountType    accountType     @relation(fields: [idAccountType], references: [id])
+  transactionPF  transactionPF[]
 }
 
 model bank {
@@ -79,15 +85,17 @@ model accountType {
 }
 
 model transactionPF {
-  id              Int      @id @default(autoincrement())
-  idCategory      Int
-  idAccount       Int
-  amount          Decimal  @db.Decimal(10, 4)
-  transactionDate DateTime
-  description     String
-  createdAt       DateTime @default(now())
-  category        category @relation(fields: [idCategory], references: [id])
-  account         account  @relation(fields: [idAccount], references: [id])
+  id                Int      @id @default(autoincrement())
+  idCategory        Int
+  idAccount         Int
+  amount            Decimal  @db.Decimal(10, 4)
+  transactionDate   DateTime
+  idTransactionType Int
+  thirdParties      Boolean
+  description       String
+  createdAt         DateTime @default(now())
+  category          category @relation(fields: [idCategory], references: [id])
+  account           account  @relation(fields: [idAccount], references: [id])
 }
 
 model category {

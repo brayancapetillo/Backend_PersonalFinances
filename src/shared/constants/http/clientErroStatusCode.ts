@@ -18,4 +18,13 @@ export enum clientErrorStatusCodes {
   RANGE_NOT_SATISFIABLE = 416, // El rango especificado por el encabezado Range no puede ser cumplido.
   EXPECTATION_FAILED = 417, // El servidor no puede cumplir con los requisitos del encabezado Expect de la solicitud.
   IM_A_TEAPOT = 418, // Un código de error HTTP de broma que indica que el servidor es un hervidor de agua.
+  MISDIRECTED_REQUEST = 421, // La solicitud fue dirigida a un servidor que no puede producir una respuesta.
+  UNPROCESSABLE_ENTITY = 422, // La solicitud está bien formada, pero no se puede procesar debido a errores de validación.
+  LOCKED = 423, // El recurso que se está intentando acceder está bloqueado.
+  FAILED_DEPENDENCY = 424, // La solicitud falló debido a fallos en las solicitudes previas.
+  TOO_EARLY = 425, // El servidor no está listo para manejar la solicitud.
+  UPGRADE_REQUIRED = 426, // El cliente debe cambiar a un protocolo diferente.
+  PRECONDITION_REQUIRED = 428, // El servidor requiere que la solicitud sea condicional.
+  TOO_MANY_REQUESTS = 429, // El usuario ha enviado demasiadas solicitudes en un período de tiempo dado.
+  REQUEST_HEADER_FIELDS_TOO_LARGE = 431, // Los campos de encabezado de la solicitud son demasiado grandes.
 }

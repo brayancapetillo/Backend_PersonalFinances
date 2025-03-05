@@ -22,11 +22,6 @@ export class AccountPrismaRepository implements IAccountRepository {
     return account !== null ? this.toDomain(account) : null
   }
 
-  public async findAllByUserId (idUser: number): Promise<Account[]> {
-    const allAccounts: prismaAccount[] = await this.prisma.account.findMany({ where: { idUser }, include: { bank: true, accountType: true } })
-    return allAccounts.map(this.toDomain)
-  }
-
   public async create (account: Account): Promise<Account> {
     const savedAccount: prismaAccount = await this.prisma.account.create(
       {
@@ -38,7 +33,11 @@ export class AccountPrismaRepository implements IAccountRepository {
               idAccountType: account.idAccountType,
               balance: account.balance,
               accountNumber: account.accountNumber,
-              createdAt: account.createdAt
+              createdAt: account.createdAt,
+              creditUsed: account.creditUsed,
+              creditLimit: account.creditLimit,
+              cutOffDate: account.cutOffDate,
+              paymentDueDate: account.paymentDueDate
             }
       }
     )
@@ -71,6 +70,10 @@ export class AccountPrismaRepository implements IAccountRepository {
       prismaAccount.accountNumber,
       prismaAccount.createdAt,
       prismaAccount.updatedAt,
+      prismaAccount.creditUsed !== null ? prismaAccount.creditUsed.toNumber() : undefined,
+      prismaAccount.creditLimit !== null ? prismaAccount.creditLimit.toNumber() : undefined,
+      prismaAccount.cutOffDate !== null ? prismaAccount.cutOffDate : undefined,
+      prismaAccount.paymentDueDate !== null ? prismaAccount.paymentDueDate : undefined,
       prismaAccount.bank !== undefined ? new Bank(prismaAccount.bank.id, prismaAccount.bank.name as tBank) : undefined,
       prismaAccount.accountType !== undefined ? new AccountType(prismaAccount.accountType.id, prismaAccount.accountType.name as taccountType) : undefined
     )

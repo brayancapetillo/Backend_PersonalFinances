@@ -7,6 +7,7 @@ import prisma from '@infrastructure/database/prisma/prismaClient'
 import { AccountPrismaRepository } from '@infrastructure/repositories/prisma/account/accountPrismaRepository'
 import { UserPFPrismaRepository } from '@infrastructure/repositories/prisma/userPF/userPFPrismaRepository'
 import { AccountController } from '@presentation/controllers/account.controller'
+import { dataUserBody } from '@presentation/middlewares/custom/DataUserBody'
 import { verifyAuth } from '@presentation/middlewares/jwt/verifyAuth'
 import { createAccountSchema } from '@presentation/middlewares/validators/schemas/account/createAccountValidation'
 import { accountIdSchema } from '@presentation/middlewares/validators/schemas/account/getAccountValidation'
@@ -28,11 +29,11 @@ const deleteAccountUseCase = new DeleteAccountUseCase(accountPrismaRepository)
 
 const accountController = new AccountController(createAccountUseCase, getAccountUseCase, updateAccountUseCase, deleteAccountUseCase)
 
-router.post('/', verifyAuth, validateSchema(createAccountSchema), accountController.createAccount.bind(accountController))
+router.post('/', [verifyAuth, dataUserBody], validateSchema(createAccountSchema), accountController.createAccount.bind(accountController))
 
 router.get('/:id', verifyAuth, validateParamsSchema(accountIdSchema), accountController.getAccount.bind(accountController))
 
-router.put('/:id', verifyAuth, [validateParamsSchema(accountIdSchema), validateSchema(updateAccountSchema)], accountController.updateAccount.bind(accountController))
+router.put('/', verifyAuth, validateSchema(updateAccountSchema), accountController.updateAccount.bind(accountController))
 
 router.delete('/:id', verifyAuth, validateParamsSchema(accountIdSchema), accountController.deleteAccount.bind(accountController))
 

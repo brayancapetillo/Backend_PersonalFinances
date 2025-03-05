@@ -1,6 +1,7 @@
 import { accountSchema } from './accountValidation'
 
 export const updateAccountSchema = accountSchema.pick({
+  id: true,
   name: true,
   idBank: true,
   idAccountType: true,

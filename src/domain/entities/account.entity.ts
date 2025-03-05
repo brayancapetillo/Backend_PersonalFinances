@@ -12,6 +12,10 @@ export class Account {
     public accountNumber: string,
     public createdAt: Date,
     public updatedAt: Date,
+    public creditUsed?: number,
+    public creditLimit?: number,
+    public cutOffDate?: Date,
+    public paymentDueDate?: Date,
     public bank?: Bank,
     public accountType?: AccountType
   ) {}

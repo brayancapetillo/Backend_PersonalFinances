@@ -53,7 +53,7 @@ export class SignInUseCase {
    */
   public async execute (signInDTO: signInDTO): Promise<tokenSummary> {
     const user: UserPF | null = await this.UserPFRepository.findByEmail(signInDTO.email)
-    if (user === null) throw new HttpError(clientErrorStatusCodes.UNAUTHORIZED, 'user not found')
+    if (user === null) throw new HttpError(clientErrorStatusCodes.FORBIDDEN, 'user not found')
 
     const isValidPassword: boolean = await this.bcryptService.comparePassword(signInDTO.password, user.password)
     if (!isValidPassword) throw new HttpError(clientErrorStatusCodes.FORBIDDEN, 'incorrect password')

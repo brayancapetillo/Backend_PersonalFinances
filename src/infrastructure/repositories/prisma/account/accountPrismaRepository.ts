@@ -1,7 +1,7 @@
 import { updateAccountDTO } from '@application/dtos/account/updateAccount.dto'
 import { Account } from '@domain/entities/account.entity'
 import { AccountType } from '@domain/entities/accountType.entity'
-import { Bank } from '@domain/entities/bank,entity'
+import { Bank } from '@domain/entities/bank.entity'
 import { IAccountRepository } from '@domain/interfaces/accountRepository'
 import { accountType, bank, account as prismaAccount, PrismaClient } from '@prisma/client'
 import { taccountType } from '@shared/types/accountType.type'

@@ -1,5 +1,5 @@
 import { AccountType } from '@domain/entities/accountType.entity'
-import { Bank } from './bank,entity'
+import { Bank } from './bank.entity'
 
 export class Account {
   constructor (

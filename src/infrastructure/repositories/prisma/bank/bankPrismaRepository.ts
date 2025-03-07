@@ -43,6 +43,17 @@ export class BankPrismaRepository implements IBankRepository {
   }
 
   /**
+   * Retrieves a bank entity by its ID from the database.
+   *
+   * @param {number} id - The unique identifier of the bank.
+   * @returns {Promise<Bank | null>} A promise that resolves to the Bank entity if found, or null if not found.
+   */
+  public async getBankById (id: number): Promise<Bank | null> {
+    const bank: PrismaBank | null = await this.prisma.bank.findUnique({ where: { id } })
+    return bank !== null ? this.toDomain(bank) : null
+  }
+
+  /**
    * Converts a Prisma bank entity to a domain bank entity.
    *
    * @param {PrismaBank} prismaBank - The Prisma bank entity to convert.

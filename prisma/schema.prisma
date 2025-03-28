@@ -85,17 +85,24 @@ model accountType {
 }
 
 model transactionPF {
-  id                Int      @id @default(autoincrement())
+  id                Int             @id @default(autoincrement())
   idCategory        Int
   idAccount         Int
-  amount            Decimal  @db.Decimal(10, 4)
+  amount            Decimal         @db.Decimal(10, 4)
   transactionDate   DateTime
   idTransactionType Int
   thirdParties      Boolean
   description       String
-  createdAt         DateTime @default(now())
-  category          category @relation(fields: [idCategory], references: [id])
-  account           account  @relation(fields: [idAccount], references: [id])
+  createdAt         DateTime        @default(now())
+  category          category        @relation(fields: [idCategory], references: [id])
+  account           account         @relation(fields: [idAccount], references: [id])
+  transactionType   transactionType @relation(fields: [idTransactionType], references: [id])
+}
+
+model transactionType {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.NVarChar(100)
+  transactionPF transactionPF[]
 }
 
 model category {

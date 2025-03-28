@@ -2,7 +2,7 @@
 import chalk from 'chalk'
 
 // - Prisma imports
-import { accountType, accountTypeTranslation, bank, category, categoryTranslation, categoryType, categoryTypeTranslation, lenguage, sex, sexTranslation } from '@prisma/client'
+import { accountType, accountTypeTranslation, bank, category, categoryTranslation, categoryType, categoryTypeTranslation, lenguage, sex, sexTranslation, transactionType } from '@prisma/client'
 
 // - Prisma client
 import prisma from '@infrastructure/database/prisma/prismaClient'
@@ -11,13 +11,15 @@ import prisma from '@infrastructure/database/prisma/prismaClient'
 import { createSex } from '@application/dtos/createSex.dto'
 
 // -Entity imports
+import { TransactionType } from '@domain/entities/transactionType'
 import { CategoryType } from '@domain/entities/categoryType.entity'
 import { AccountType } from '@domain/entities/accountType.entity'
 import { Lenguage } from '@domain/entities/lenguage.entity'
 import { Category } from '@domain/entities/category.entity'
-import { Bank } from '@domain/entities/bank,entity'
+import { Bank } from '@domain/entities/bank.entity'
 
 // -Data imports
+import { dataTransactionType } from './data/transactionType'
 import { dataCategoryType } from './data/categoryType'
 import { dataAccountType } from './data/accountType'
 import { dataCategory } from './data/category'
@@ -87,6 +89,9 @@ const main = async (): Promise<void> => {
 
     // Insert category data
     await insertData<Pick<Category, 'idCategoryType' | 'name'>, category>(dataCategory, async (data) => await prisma.category.create({ data }), 'category')
+
+    // Insert transactionType data
+    await insertData<Pick<TransactionType, 'name'>, transactionType>(dataTransactionType, async (data) => await prisma.transactionType.create({ data }), 'transactionType')
 
     // Insert translation data
     await insertData<Pick<sexTranslation, 'idSex' | 'idLenguage' | 'name'>, sexTranslation>(dataSexTranslation, async (data) => await prisma.sexTranslation.create({ data }), 'sexTranslation')

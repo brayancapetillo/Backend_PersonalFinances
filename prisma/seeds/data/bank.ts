@@ -1,4 +1,4 @@
-import { Bank } from '@domain/entities/bank,entity'
+import { Bank } from '@domain/entities/bank.entity'
 
 export const dataBank: Array<Pick<Bank, 'name'>> = [
   { name: 'BBVA Bancomer' },

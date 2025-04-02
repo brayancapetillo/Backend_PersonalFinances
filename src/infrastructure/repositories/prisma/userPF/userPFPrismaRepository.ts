@@ -9,10 +9,14 @@
 
 // -Entity's import
 import { UserPFRepository } from '@domain/interfaces/UserPFRepository'
+import { Account } from '@domain/entities/account.entity'
 import { UserPF } from '@domain/entities/userPF.entity'
 
 // -Prisma's import
-import { PrismaClient, userPF as prismaUserPF } from '@prisma/client'
+import { account as prismaAccount, PrismaClient, userPF as prismaUserPF } from '@prisma/client'
+
+// -Mapper's import
+import { toDomainAccount } from '@infrastructure/mappers/account/accountMapper'
 
 /**
  * UserPFPrismaRepository class for handling database operations related to UserPF entities.
@@ -89,6 +93,17 @@ export class UserPFPrismaRepository implements UserPFRepository {
     )
 
     return this.toDomain(savedUser)
+  }
+
+  /**
+   * Finds all accounts related to a specific UserPF by their user ID.
+   *
+   * @param {number} idUser - The ID of the UserPF to find associated accounts.
+   * @returns {Promise<Account[]>} A promise that resolves to an array of Account entities.
+   */
+  public async findAccountsByUserId (idUser: number): Promise<Account[]> {
+    const accounts: prismaAccount[] = await this.prisma.account.findMany({ where: { idUser } })
+    return accounts.map((account: prismaAccount) => toDomainAccount(account))
   }
 
   /**

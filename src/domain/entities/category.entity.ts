@@ -1,13 +1,11 @@
 import { tcategoryName, tidCategoryType } from '@shared/types/category.type'
+import { CategoryType } from './categoryType.entity'
 
 export class Category {
-  public readonly id: number
-  public readonly name: tcategoryName
-  public readonly idCategoryType: tidCategoryType
-
-  constructor (id: number, name: tcategoryName, idCategoryType: tidCategoryType) {
-    this.id = id
-    this.name = name
-    this.idCategoryType = idCategoryType
-  }
+  constructor (
+    public readonly id: number,
+    public readonly name: tcategoryName,
+    public readonly idCategoryType: tidCategoryType,
+    public categoryType?: CategoryType
+  ) {}
 }
